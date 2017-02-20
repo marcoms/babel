@@ -8,14 +8,8 @@ import transformReactDisplayName from "babel-plugin-transform-react-display-name
 // import transformReactJSXSelf from "babel-plugin-transform-react-jsx-self";
 
 export default {
-  presets: [
-    presetFlow
-  ],
-  plugins: [
-    transformReactJSX,
-    transformSyntaxJSX,
-    transformReactDisplayName
-  ],
+  presets: [presetFlow],
+  plugins: [transformReactJSX, transformSyntaxJSX, transformReactDisplayName],
   env: {
     development: {
       plugins: [

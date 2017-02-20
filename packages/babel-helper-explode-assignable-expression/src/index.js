@@ -32,9 +32,7 @@ function getObjRef(node, nodes, file, scope) {
   }
 
   const temp = scope.generateUidIdentifierBasedOnNode(ref);
-  nodes.push(t.variableDeclaration("var", [
-    t.variableDeclarator(temp, ref)
-  ]));
+  nodes.push(t.variableDeclaration("var", [t.variableDeclarator(temp, ref)]));
   return temp;
 }
 
@@ -44,21 +42,19 @@ function getPropRef(node, nodes, file, scope) {
   if (t.isLiteral(key) && t.isPureish(key)) return key;
 
   const temp = scope.generateUidIdentifierBasedOnNode(prop);
-  nodes.push(t.variableDeclaration("var", [
-    t.variableDeclarator(temp, prop)
-  ]));
+  nodes.push(t.variableDeclaration("var", [t.variableDeclarator(temp, prop)]));
   return temp;
 }
 
-export default function (
+export default function(
   node: Object,
   nodes: Array<Object>,
   file,
   scope: Scope,
-  allowedSingleIdent?: boolean,
+  allowedSingleIdent?: boolean
 ): {
-  uid: Object;
-  ref: Object;
+  uid: Object,
+  ref: Object
 } {
   let obj;
   if (t.isIdentifier(node) && allowedSingleIdent) {

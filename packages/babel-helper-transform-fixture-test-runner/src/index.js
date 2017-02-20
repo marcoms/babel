@@ -17,21 +17,20 @@ import path from "path";
 const babelHelpers = eval(buildExternalHelpers(null, "var"));
 
 function wrapPackagesArray(type, names, optionsDir) {
-  return (names || []).map(function (val) {
+  return (names || []).map(function(val) {
     if (typeof val === "string") val = [val];
 
     // relative path (outside of monorepo)
     if (val[0][0] === ".") {
-
       if (!optionsDir) {
-        throw new Error("Please provide an options.json in test dir when using a " +
-          "relative plugin path.");
+        throw new Error(
+          "Please provide an options.json in test dir when using a " + "relative plugin path."
+        );
       }
 
       val[0] = path.resolve(optionsDir, val[0]);
-    }
-    // check node_modules/babel-x-y
-    else {
+    } else {
+      // check node_modules/babel-x-y
       val[0] = __dirname + "/../../babel-" + type + "-" + val[0];
     }
 
@@ -42,20 +41,24 @@ function wrapPackagesArray(type, names, optionsDir) {
 function run(task) {
   const actual = task.actual;
   const expect = task.expect;
-  const exec   = task.exec;
-  const opts   = task.options;
+  const exec = task.exec;
+  const opts = task.options;
   const optionsDir = task.optionsDir;
 
   function getOpts(self) {
-    const newOpts = merge({
-      filename: self.loc,
-    }, opts);
+    const newOpts = merge(
+      {
+        filename: self.loc
+      },
+      opts
+    );
 
     newOpts.plugins = wrapPackagesArray("plugin", newOpts.plugins, optionsDir);
-    newOpts.presets = wrapPackagesArray("preset", newOpts.presets, optionsDir).map(function (val) {
+    newOpts.presets = wrapPackagesArray("preset", newOpts.presets, optionsDir).map(function(val) {
       if (val.length > 2) {
-        throw new Error("Unexpected extra options " + JSON.stringify(val.slice(2)) +
-          " passed to preset.");
+        throw new Error(
+          "Unexpected extra options " + JSON.stringify(val.slice(2)) + " passed to preset."
+        );
       }
 
       return val;
@@ -88,7 +91,10 @@ function run(task) {
   if (!execCode || actualCode) {
     result = babel.transform(actualCode, getOpts(actual));
     if (
-      !expect.code && result.code && !opts.throws && fs.statSync(path.dirname(expect.loc)).isDirectory() &&
+      !expect.code &&
+      result.code &&
+      !opts.throws &&
+      fs.statSync(path.dirname(expect.loc)).isDirectory() &&
       !process.env.CI
     ) {
       console.log(`New test file created: ${expect.loc}`);
@@ -106,7 +112,7 @@ function run(task) {
   if (task.sourceMappings) {
     const consumer = new sourceMap.SourceMapConsumer(result.map);
 
-    task.sourceMappings.forEach(function (mapping) {
+    task.sourceMappings.forEach(function(mapping) {
       const actual = mapping.original;
 
       const expect = consumer.originalPositionFor(mapping.generated);
@@ -136,61 +142,68 @@ function runExec(opts, execCode, execDirname) {
   return fn.apply(null, Object.values(sandbox));
 }
 
-export default function (
+export default function(
   fixturesLoc: string,
   name: string,
   suiteOpts = {},
   taskOpts = {},
-  dynamicOpts?: Function,
+  dynamicOpts?: Function
 ) {
   const suites = getFixtures(fixturesLoc);
 
   for (const testSuite of suites) {
     if (includes(suiteOpts.ignoreSuites, testSuite.title)) continue;
 
-    describe(name + "/" + testSuite.title, function () {
+    describe(name + "/" + testSuite.title, function() {
       for (const task of testSuite.tests) {
-        if (includes(suiteOpts.ignoreTasks, task.title) ||
-            includes(suiteOpts.ignoreTasks, testSuite.title + "/" + task.title)) continue;
+        if (
+          includes(suiteOpts.ignoreTasks, task.title) ||
+          includes(suiteOpts.ignoreTasks, testSuite.title + "/" + task.title)
+        )
+          continue;
 
-        it(task.title, !task.disabled && function () {
-          function runTask() {
-            run(task);
-          }
-
-          defaults(task.options, {
-            filenameRelative: task.expect.filename,
-            sourceFileName:   task.actual.filename,
-            sourceMapTarget:  task.expect.filename,
-            suppressDeprecationMessages: true,
-            babelrc: false,
-            sourceMap: !!(task.sourceMappings || task.sourceMap),
-          });
-
-          extend(task.options, taskOpts);
-
-          if (dynamicOpts) dynamicOpts(task.options, task);
-
-          const throwMsg = task.options.throws;
-          if (throwMsg) {
-            // internal api doesn't have this option but it's best not to pollute
-            // the options object with useless options
-            delete task.options.throws;
-
-            assert.throws(runTask, function (err) {
-              return throwMsg === true || err.message.indexOf(throwMsg) >= 0;
-            });
-          } else {
-            if (task.exec.code) {
-              const result = run(task);
-              if (result && typeof result.then === "function") {
-                return result;
+        it(
+          task.title,
+          !task.disabled &&
+            function() {
+              function runTask() {
+                run(task);
               }
-            } else {
-              runTask();
+
+              defaults(task.options, {
+                filenameRelative: task.expect.filename,
+                sourceFileName: task.actual.filename,
+                sourceMapTarget: task.expect.filename,
+                suppressDeprecationMessages: true,
+                babelrc: false,
+                sourceMap: !!(task.sourceMappings || task.sourceMap)
+              });
+
+              extend(task.options, taskOpts);
+
+              if (dynamicOpts) dynamicOpts(task.options, task);
+
+              const throwMsg = task.options.throws;
+              if (throwMsg) {
+                // internal api doesn't have this option but it's best not to pollute
+                // the options object with useless options
+                delete task.options.throws;
+
+                assert.throws(runTask, function(err) {
+                  return throwMsg === true || err.message.indexOf(throwMsg) >= 0;
+                });
+              } else {
+                if (task.exec.code) {
+                  const result = run(task);
+                  if (result && typeof result.then === "function") {
+                    return result;
+                  }
+                } else {
+                  runTask();
+                }
+              }
             }
-          }
-        });
+        );
       }
     });
   }

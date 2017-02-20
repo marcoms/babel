@@ -1,4 +1,4 @@
-export default function ({ types: t }) {
+export default function({ types: t }) {
   const IGNORE = Symbol();
 
   return {
@@ -14,7 +14,7 @@ export default function ({ types: t }) {
       UnaryExpression(path) {
         const { node, parent } = path;
         if (node[IGNORE]) return;
-        if (path.find((path) => path.node && !!path.node._generated)) return;
+        if (path.find(path => path.node && !!path.node._generated)) return;
 
         if (
           path.parentPath.isBinaryExpression() &&
@@ -24,7 +24,8 @@ export default function ({ types: t }) {
           // need to handle symbols
           const opposite = path.getOpposite();
           if (
-            opposite.isLiteral() && opposite.node.value !== "symbol" &&
+            opposite.isLiteral() &&
+            opposite.node.value !== "symbol" &&
             opposite.node.value !== "object"
           ) {
             return;
@@ -37,11 +38,13 @@ export default function ({ types: t }) {
             const undefLiteral = t.stringLiteral("undefined");
             const unary = t.unaryExpression("typeof", node.argument);
             unary[IGNORE] = true;
-            path.replaceWith(t.conditionalExpression(
-              t.binaryExpression("===", unary, undefLiteral),
-              undefLiteral,
-              call
-            ));
+            path.replaceWith(
+              t.conditionalExpression(
+                t.binaryExpression("===", unary, undefLiteral),
+                undefLiteral,
+                call
+              )
+            );
           } else {
             path.replaceWith(call);
           }

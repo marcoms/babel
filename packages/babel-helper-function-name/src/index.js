@@ -2,7 +2,8 @@ import getFunctionArity from "babel-helper-get-function-arity";
 import template from "babel-template";
 import * as t from "babel-types";
 
-const buildPropertyMethodAssignmentWrapper = template(`
+const buildPropertyMethodAssignmentWrapper = template(
+  `
   (function (FUNCTION_KEY) {
     function FUNCTION_ID() {
       return FUNCTION_KEY.apply(this, arguments);
@@ -14,9 +15,11 @@ const buildPropertyMethodAssignmentWrapper = template(`
 
     return FUNCTION_ID;
   })(FUNCTION)
-`);
+`
+);
 
-const buildGeneratorPropertyMethodAssignmentWrapper = template(`
+const buildGeneratorPropertyMethodAssignmentWrapper = template(
+  `
   (function (FUNCTION_KEY) {
     function* FUNCTION_ID() {
       return yield* FUNCTION_KEY.apply(this, arguments);
@@ -28,7 +31,8 @@ const buildGeneratorPropertyMethodAssignmentWrapper = template(`
 
     return FUNCTION_ID;
   })(FUNCTION)
-`);
+`
+);
 
 const visitor = {
   "ReferencedIdentifier|BindingIdentifier"(path, state) {
@@ -82,10 +86,10 @@ function wrap(state, method, id, scope) {
 function visit(node, name, scope) {
   const state = {
     selfAssignment: false,
-    selfReference:  false,
-    outerDeclar:    scope.getBindingIdentifier(name),
-    references:     [],
-    name:           name
+    selfReference: false,
+    outerDeclar: scope.getBindingIdentifier(name),
+    references: [],
+    name: name
   };
 
   // check to see if we have a local binding of the id we're setting inside of
@@ -125,12 +129,14 @@ function visit(node, name, scope) {
   return state;
 }
 
-export default function ({ node, parent, scope, id }) {
+export default function({ node, parent, scope, id }) {
   // has an `id` so we don't need to infer one
   if (node.id) return;
 
-  if ((t.isObjectProperty(parent) || t.isObjectMethod(parent, { kind: "method" })) &&
-    (!parent.computed || t.isLiteral(parent.key))) {
+  if (
+    (t.isObjectProperty(parent) || t.isObjectMethod(parent, { kind: "method" })) &&
+    (!parent.computed || t.isLiteral(parent.key))
+  ) {
     // { foo() {} };
     id = parent.key;
   } else if (t.isVariableDeclarator(parent)) {

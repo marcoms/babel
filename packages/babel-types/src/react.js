@@ -6,10 +6,7 @@ export function isCompatTag(tagName?: string): boolean {
   return !!tagName && /^[a-z]|\-/.test(tagName);
 }
 
-function cleanJSXElementLiteralChild(
-  child: { value: string },
-  args: Array<Object>,
-) {
+function cleanJSXElementLiteralChild(child: { value: string }, args: Array<Object>) {
   const lines = child.value.split(/\r\n|\n|\r/);
 
   let lastNonEmptyLine = 0;

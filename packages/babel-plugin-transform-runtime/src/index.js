@@ -1,6 +1,6 @@
 import definitions from "./definitions";
 
-export default function ({ types: t }) {
+export default function({ types: t }) {
   function getRuntimeModuleName(opts) {
     return opts.moduleName || "babel-runtime";
   }
@@ -16,14 +16,14 @@ export default function ({ types: t }) {
       const moduleName = getRuntimeModuleName(this.opts);
 
       if (this.opts.helpers !== false) {
-        file.set("helperGenerator", function (name) {
+        file.set("helperGenerator", function(name) {
           if (HELPER_BLACKLIST.indexOf(name) < 0) {
             return file.addImport(`${moduleName}/helpers/${name}`, "default", name);
           }
         });
       }
 
-      this.setDynamic("regeneratorIdentifier", function () {
+      this.setDynamic("regeneratorIdentifier", function() {
         return file.addImport(`${moduleName}/regenerator`, "default", "regeneratorRuntime");
       });
     },
@@ -45,11 +45,13 @@ export default function ({ types: t }) {
 
         // Symbol() -> _core.Symbol(); new Promise -> new _core.Promise
         const moduleName = getRuntimeModuleName(state.opts);
-        path.replaceWith(state.addImport(
-          `${moduleName}/core-js/${definitions.builtins[node.name]}`,
-          "default",
-          node.name
-        ));
+        path.replaceWith(
+          state.addImport(
+            `${moduleName}/core-js/${definitions.builtins[node.name]}`,
+            "default",
+            node.name
+          )
+        );
       },
 
       // arr[Symbol.iterator]() -> _core.$for.getIterator(arr)
@@ -65,14 +67,12 @@ export default function ({ types: t }) {
         if (!path.get("callee.property").matchesPattern("Symbol.iterator")) return;
 
         const moduleName = getRuntimeModuleName(state.opts);
-        path.replaceWith(t.callExpression(
-          state.addImport(
-            `${moduleName}/core-js/get-iterator`,
-            "default",
-            "getIterator"
-          ),
-          [callee.object]
-        ));
+        path.replaceWith(
+          t.callExpression(
+            state.addImport(`${moduleName}/core-js/get-iterator`, "default", "getIterator"),
+            [callee.object]
+          )
+        );
       },
 
       // Symbol.iterator in arr -> core.$for.isIterable(arr)
@@ -83,14 +83,12 @@ export default function ({ types: t }) {
         if (!path.get("left").matchesPattern("Symbol.iterator")) return;
 
         const moduleName = getRuntimeModuleName(state.opts);
-        path.replaceWith(t.callExpression(
-          state.addImport(
-            `${moduleName}/core-js/is-iterable`,
-            "default",
-            "isIterable"
-          ),
-          [path.node.right]
-        ));
+        path.replaceWith(
+          t.callExpression(
+            state.addImport(`${moduleName}/core-js/is-iterable`, "default", "isIterable"),
+            [path.node.right]
+          )
+        );
       },
 
       // Array.from -> _core.Array.from
@@ -114,17 +112,23 @@ export default function ({ types: t }) {
           if (path.scope.getBindingIdentifier(obj.name)) return;
 
           // special case Object.defineProperty to not use core-js when using string keys
-          if (obj.name === "Object" && prop.name === "defineProperty" && path.parentPath.isCallExpression()) {
+          if (
+            obj.name === "Object" &&
+            prop.name === "defineProperty" &&
+            path.parentPath.isCallExpression()
+          ) {
             const call = path.parentPath.node;
             if (call.arguments.length === 3 && t.isLiteral(call.arguments[1])) return;
           }
 
           const moduleName = getRuntimeModuleName(state.opts);
-          path.replaceWith(state.addImport(
-            `${moduleName}/core-js/${methods[prop.name]}`,
-            "default",
-            `${obj.name}$${prop.name}`
-          ));
+          path.replaceWith(
+            state.addImport(
+              `${moduleName}/core-js/${methods[prop.name]}`,
+              "default",
+              `${obj.name}$${prop.name}`
+            )
+          );
         },
 
         exit(path, state) {
@@ -138,15 +142,17 @@ export default function ({ types: t }) {
           if (path.scope.getBindingIdentifier(obj.name)) return;
 
           const moduleName = getRuntimeModuleName(state.opts);
-          path.replaceWith(t.memberExpression(
-            state.addImport(
-              `${moduleName}/core-js/${definitions.builtins[obj.name]}`,
-              "default",
-              obj.name
-            ),
-            node.property,
-            node.computed
-          ));
+          path.replaceWith(
+            t.memberExpression(
+              state.addImport(
+                `${moduleName}/core-js/${definitions.builtins[obj.name]}`,
+                "default",
+                obj.name
+              ),
+              node.property,
+              node.computed
+            )
+          );
         }
       }
     }

@@ -1,4 +1,4 @@
-export default function ({ types: t }) {
+export default function({ types: t }) {
   function build(node, nodes, scope) {
     const first = node.specifiers[0];
     if (!t.isExportNamespaceSpecifier(first) && !t.isExportDefaultSpecifier(first)) return;

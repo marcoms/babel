@@ -16,7 +16,6 @@ export function save() {
   try {
     serialised = JSON.stringify(data, null, "  ");
   } catch (err) {
-
     if (err.message === "Invalid string length") {
       err.message = "Cache too large so it's been cleared.";
       console.error(err.stack);

@@ -14,7 +14,7 @@ let userArgs;
 // separate node arguments from script arguments
 const argSeparator = babelArgs.indexOf("--");
 if (argSeparator > -1) {
-  userArgs  = babelArgs.slice(argSeparator); // including the  --
+  userArgs = babelArgs.slice(argSeparator); // including the  --
   babelArgs = babelArgs.slice(0, argSeparator);
 }
 
@@ -33,7 +33,7 @@ function getNormalizedV8Flag(arg) {
   return arg;
 }
 
-getV8Flags(function (err, v8Flags) {
+getV8Flags(function(err, v8Flags) {
   babelArgs.forEach(function(arg) {
     const flag = arg.split("=")[0];
 
@@ -79,9 +79,11 @@ getV8Flags(function (err, v8Flags) {
     if (err.code !== "MODULE_NOT_FOUND") throw err;
 
     const child_process = require("child_process");
-    const proc = child_process.spawn(process.argv[0], args, { stdio: "inherit" });
-    proc.on("exit", function (code, signal) {
-      process.on("exit", function () {
+    const proc = child_process.spawn(process.argv[0], args, {
+      stdio: "inherit"
+    });
+    proc.on("exit", function(code, signal) {
+      process.on("exit", function() {
         if (signal) {
           process.kill(process.pid, signal);
         } else {

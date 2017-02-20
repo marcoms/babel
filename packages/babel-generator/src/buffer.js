@@ -22,13 +22,13 @@ export default class Buffer {
 
   _position: Object = {
     line: 1,
-    column: 0,
+    column: 0
   };
   _sourcePosition: Object = {
     identifierName: null,
     line: null,
     column: null,
-    filename: null,
+    filename: null
   };
 
   /**
@@ -44,7 +44,7 @@ export default class Buffer {
       // source string since it may be arbitrarily large after all transformations
       code: trimRight(this._buf.join("")),
       map: null,
-      rawMappings: map && map.getRawMappings(),
+      rawMappings: map && map.getRawMappings()
     };
 
     if (map) {
@@ -58,7 +58,7 @@ export default class Buffer {
         },
         set(value) {
           Object.defineProperty(this, "map", { value, writable: true });
-        },
+        }
       });
     }
 
@@ -81,7 +81,9 @@ export default class Buffer {
 
   queue(str: string): void {
     // Drop trailing spaces when a newline is inserted.
-    if (str === "\n") while (this._queue.length > 0 && SPACES_RE.test(this._queue[0][0])) this._queue.shift();
+    if (str === "\n")
+      while (this._queue.length > 0 && SPACES_RE.test(this._queue[0][0]))
+        this._queue.shift();
 
     const { line, column, filename, identifierName } = this._sourcePosition;
     this._queue.unshift([str, line, column, identifierName, filename]);
@@ -89,13 +91,27 @@ export default class Buffer {
 
   _flush(): void {
     let item;
-    while (item = this._queue.pop()) this._append(...item);
+    while (item = this._queue.pop())
+      this._append(...item);
   }
 
-  _append(str: string, line: number, column: number, identifierName: ?string, filename: ?string): void {
+  _append(
+    str: string,
+    line: number,
+    column: number,
+    identifierName: ?string,
+    filename: ?string
+  ): void {
     // If there the line is ending, adding a new mapping marker is redundant
     if (this._map && str[0] !== "\n") {
-      this._map.mark(this._position.line, this._position.column, line, column, identifierName, filename);
+      this._map.mark(
+        this._position.line,
+        this._position.column,
+        line,
+        column,
+        identifierName,
+        filename
+      );
     }
 
     this._buf.push(str);
@@ -190,7 +206,7 @@ export default class Buffer {
     const extra = this._queue.reduce((acc, item) => item[0] + acc, "");
     const lastIndex = extra.lastIndexOf("\n");
 
-    return lastIndex === -1 ? this._position.column + extra.length : (extra.length - 1 - lastIndex);
+    return lastIndex === -1 ? this._position.column + extra.length : extra.length - 1 - lastIndex;
   }
 
   getCurrentLine(): number {

@@ -1,6 +1,6 @@
 import pull from "lodash/pull";
 
-export default function ({ types: t }) {
+export default function({ types: t }) {
   function isProtoKey(node) {
     return t.isLiteral(t.toComputedKey(node, node.key), { value: "__proto__" });
   }
@@ -21,8 +21,8 @@ export default function ({ types: t }) {
         if (!isProtoAssignmentExpression(path.node)) return;
 
         const nodes = [];
-        const left  = path.node.left.object;
-        const temp  = path.scope.maybeGenerateMemoised(left);
+        const left = path.node.left.object;
+        const temp = path.scope.maybeGenerateMemoised(left);
 
         if (temp) nodes.push(t.expressionStatement(t.assignmentExpression("=", temp, left)));
         nodes.push(buildDefaultsCallExpression(path.node, temp || left, file));

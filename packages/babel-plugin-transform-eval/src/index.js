@@ -1,4 +1,4 @@
-export default function ({ parse, traverse }) {
+export default function({ parse, traverse }) {
   return {
     visitor: {
       CallExpression(path) {

@@ -14,9 +14,7 @@ export const visitor = {
       if (param.isArrayPattern() || param.isObjectPattern()) {
         const uid = path.scope.generateUidIdentifier("ref");
 
-        const declar = t.variableDeclaration("let", [
-          t.variableDeclarator(param.node, uid)
-        ]);
+        const declar = t.variableDeclaration("let", [t.variableDeclarator(param.node, uid)]);
         declar._blockHoist = outputParamsLength - i;
 
         path.ensureBlock();

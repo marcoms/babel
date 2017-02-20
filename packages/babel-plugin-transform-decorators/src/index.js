@@ -1,13 +1,15 @@
 import template from "babel-template";
 import explodeClass from "babel-helper-explode-class";
 
-const buildClassDecorator = template(`
+const buildClassDecorator = template(
+  `
   CLASS_REF = DECORATOR(CLASS_REF) || CLASS_REF;
-`);
+`
+);
 
-export default function ({ types: t }) {
+export default function({ types: t }) {
   function cleanDecorators(decorators) {
-    return decorators.reverse().map((dec) => dec.expression);
+    return decorators.reverse().map(dec => dec.expression);
   }
 
   function transformClass(path, ref, state) {
@@ -21,10 +23,12 @@ export default function ({ types: t }) {
       classDecorators = cleanDecorators(classDecorators);
 
       for (const decorator of classDecorators) {
-        nodes.push(buildClassDecorator({
-          CLASS_REF: ref,
-          DECORATOR: decorator
-        }));
+        nodes.push(
+          buildClassDecorator({
+            CLASS_REF: ref,
+            DECORATOR: decorator
+          })
+        );
       }
     }
 
@@ -72,7 +76,7 @@ export default function ({ types: t }) {
 
   function doError(path) {
     throw path.buildCodeFrameError(
-`Decorators are not officially supported yet in 6.x pending a proposal update.
+      `Decorators are not officially supported yet in 6.x pending a proposal update.
 However, if you need to use them you can install the legacy decorators transform with:
 
 npm install babel-plugin-transform-decorators-legacy --save-dev
@@ -84,7 +88,8 @@ and add the following line to your .babelrc file:
 }
 
 The repo url is: https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy.
-    `);
+    `
+    );
   }
 
   return {
@@ -117,7 +122,9 @@ The repo url is: https://github.com/loganfsmyth/babel-plugin-transform-decorator
         const ref = path.node.id;
         let nodes = [];
 
-        nodes = nodes.concat(transformClass(path, ref, this).map((expr) => t.expressionStatement(expr)));
+        nodes = nodes.concat(
+          transformClass(path, ref, this).map(expr => t.expressionStatement(expr))
+        );
         nodes.push(t.expressionStatement(ref));
 
         path.insertAfter(nodes);

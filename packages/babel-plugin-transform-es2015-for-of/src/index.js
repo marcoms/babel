@@ -1,9 +1,12 @@
-export default function ({ messages, template, types: t }) {
-  const buildForOfArray = template(`
+export default function({ messages, template, types: t }) {
+  const buildForOfArray = template(
+    `
     for (var KEY = 0; KEY < ARR.length; KEY++) BODY;
-  `);
+  `
+  );
 
-  const buildForOfLoose = template(`
+  const buildForOfLoose = template(
+    `
     for (var LOOP_OBJECT = OBJECT,
              IS_ARRAY = Array.isArray(LOOP_OBJECT),
              INDEX = 0,
@@ -18,10 +21,12 @@ export default function ({ messages, template, types: t }) {
         ID = INDEX.value;
       }
     }
-  `);
+  `
+  );
 
   /* eslint-disable max-len */
-  const buildForOf = template(`
+  const buildForOf = template(
+    `
     var ITERATOR_COMPLETION = true;
     var ITERATOR_HAD_ERROR_KEY = false;
     var ITERATOR_ERROR_KEY = undefined;
@@ -42,7 +47,8 @@ export default function ({ messages, template, types: t }) {
         }
       }
     }
-  `);
+  `
+  );
   /* eslint-enable max-len */
 
   function _ForOfStatementArray(path) {
@@ -52,9 +58,7 @@ export default function ({ messages, template, types: t }) {
 
     if (!t.isIdentifier(right) || !scope.hasBinding(right.name)) {
       const uid = scope.generateUidIdentifier("arr");
-      nodes.push(t.variableDeclaration("var", [
-        t.variableDeclarator(uid, right)
-      ]));
+      nodes.push(t.variableDeclaration("var", [t.variableDeclarator(uid, right)]));
       right = uid;
     }
 
@@ -62,8 +66,8 @@ export default function ({ messages, template, types: t }) {
 
     let loop = buildForOfArray({
       BODY: node.body,
-      KEY:  iterationKey,
-      ARR:  right
+      KEY: iterationKey,
+      ARR: right
     });
 
     t.inherits(loop, node);
@@ -76,8 +80,9 @@ export default function ({ messages, template, types: t }) {
       left.declarations[0].init = iterationValue;
       loop.body.body.unshift(left);
     } else {
-      loop.body.body.unshift(t.expressionStatement(
-        t.assignmentExpression("=", left, iterationValue)));
+      loop.body.body.unshift(
+        t.expressionStatement(t.assignmentExpression("=", left, iterationValue))
+      );
     }
 
     if (path.parentPath.isLabeledStatement()) {
@@ -88,7 +93,6 @@ export default function ({ messages, template, types: t }) {
 
     return nodes;
   }
-
 
   return {
     visitor: {
@@ -105,10 +109,10 @@ export default function ({ messages, template, types: t }) {
         if (state.opts.loose) callback = loose;
 
         const { node } = path;
-        const build  = callback(path, state);
+        const build = callback(path, state);
         const declar = build.declar;
-        const loop   = build.loop;
-        const block  = loop.body;
+        const loop = build.loop;
+        const block = loop.body;
 
         // ensure that it's a block so we can take all its statements
         path.ensureBlock();
@@ -153,14 +157,14 @@ export default function ({ messages, template, types: t }) {
     }
 
     const iteratorKey = scope.generateUidIdentifier("iterator");
-    const isArrayKey  = scope.generateUidIdentifier("isArray");
+    const isArrayKey = scope.generateUidIdentifier("isArray");
 
     const loop = buildForOfLoose({
-      LOOP_OBJECT:  iteratorKey,
-      IS_ARRAY:     isArrayKey,
-      OBJECT:       node.right,
-      INDEX:        scope.generateUidIdentifier("i"),
-      ID:           id
+      LOOP_OBJECT: iteratorKey,
+      IS_ARRAY: isArrayKey,
+      OBJECT: node.right,
+      INDEX: scope.generateUidIdentifier("i"),
+      ID: id
     });
 
     if (!declar) {
@@ -179,9 +183,9 @@ export default function ({ messages, template, types: t }) {
 
     return {
       replaceParent: isLabeledParent,
-      declar:        declar,
-      node:          labeled || loop,
-      loop:          loop
+      declar: declar,
+      node: labeled || loop,
+      loop: loop
     };
   }
 
@@ -190,7 +194,7 @@ export default function ({ messages, template, types: t }) {
     const left = node.left;
     let declar;
 
-    const stepKey   = scope.generateUidIdentifier("step");
+    const stepKey = scope.generateUidIdentifier("step");
     const stepValue = t.memberExpression(stepKey, t.identifier("value"));
 
     if (t.isIdentifier(left) || t.isPattern(left) || t.isMemberExpression(left)) {
@@ -211,12 +215,12 @@ export default function ({ messages, template, types: t }) {
 
     const template = buildForOf({
       ITERATOR_HAD_ERROR_KEY: scope.generateUidIdentifier("didIteratorError"),
-      ITERATOR_COMPLETION:    scope.generateUidIdentifier("iteratorNormalCompletion"),
-      ITERATOR_ERROR_KEY:     scope.generateUidIdentifier("iteratorError"),
-      ITERATOR_KEY:           iteratorKey,
-      STEP_KEY:               stepKey,
-      OBJECT:                 node.right,
-      BODY:                   null
+      ITERATOR_COMPLETION: scope.generateUidIdentifier("iteratorNormalCompletion"),
+      ITERATOR_ERROR_KEY: scope.generateUidIdentifier("iteratorError"),
+      ITERATOR_KEY: iteratorKey,
+      STEP_KEY: stepKey,
+      OBJECT: node.right,
+      BODY: null
     });
 
     const isLabeledParent = t.isLabeledStatement(parent);
@@ -232,9 +236,9 @@ export default function ({ messages, template, types: t }) {
 
     return {
       replaceParent: isLabeledParent,
-      declar:        declar,
-      loop:          loop,
-      node:          template
+      declar: declar,
+      loop: loop,
+      node: template
     };
   }
 }

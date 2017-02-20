@@ -4,11 +4,6 @@ import transformClassConstructorCall from "babel-plugin-transform-class-construc
 import transformExportExtensions from "babel-plugin-transform-export-extensions";
 
 export default {
-  presets: [
-    presetStage2
-  ],
-  plugins: [
-    transformClassConstructorCall,
-    transformExportExtensions
-  ]
+  presets: [presetStage2],
+  plugins: [transformClassConstructorCall, transformExportExtensions]
 };

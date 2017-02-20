@@ -1,7 +1,8 @@
 import template from "babel-template";
 import * as t from "babel-types";
 
-const buildRest = template(`
+const buildRest = template(
+  `
   for (var LEN = ARGUMENTS.length,
            ARRAY = Array(ARRAY_LEN),
            KEY = START;
@@ -9,19 +10,26 @@ const buildRest = template(`
        KEY++) {
     ARRAY[ARRAY_KEY] = ARGUMENTS[KEY];
   }
-`);
+`
+);
 
-const restIndex = template(`
+const restIndex = template(
+  `
   ARGUMENTS.length <= INDEX ? undefined : ARGUMENTS[INDEX]
-`);
+`
+);
 
-const restIndexImpure = template(`
+const restIndexImpure = template(
+  `
   REF = INDEX, ARGUMENTS.length <= REF ? undefined : ARGUMENTS[REF]
-`);
+`
+);
 
-const restLength = template(`
+const restLength = template(
+  `
   ARGUMENTS.length <= OFFSET ? 0 : ARGUMENTS.length - OFFSET
-`);
+`
+);
 
 const memberExpressionOptimisationVisitor = {
   Scope(path, state) {
@@ -38,7 +46,7 @@ const memberExpressionOptimisationVisitor = {
     path.skip();
   },
 
-  "Function|ClassProperty": function (path, state) {
+  "Function|ClassProperty": function(path, state) {
     // Detect whether any reference to rest is contained in nested functions to
     // determine if deopt is necessary.
     const oldNoOptimise = state.noOptimise;
@@ -77,38 +85,25 @@ const memberExpressionOptimisationVisitor = {
       if (parentPath.isMemberExpression({ object: node })) {
         const grandparentPath = parentPath.parentPath;
 
-        const argsOptEligible = !state.deopted && !(
-          // ex: `args[0] = "whatever"`
-          (
-            grandparentPath.isAssignmentExpression() &&
-            parentPath.node === grandparentPath.node.left
-          ) ||
-
-          // ex: `[args[0]] = ["whatever"]`
-          grandparentPath.isLVal() ||
-
-          // ex: `for (rest[0] in this)`
-          // ex: `for (rest[0] of this)`
-          grandparentPath.isForXStatement() ||
-
-          // ex: `++args[0]`
-          // ex: `args[0]--`
-          grandparentPath.isUpdateExpression() ||
-
-          // ex: `delete args[0]`
-          grandparentPath.isUnaryExpression({ operator: "delete" }) ||
-
-          // ex: `args[0]()`
-          // ex: `new args[0]()`
-          // ex: `new args[0]`
-          (
-            (
-              grandparentPath.isCallExpression() ||
-              grandparentPath.isNewExpression()
-            ) &&
-            parentPath.node === grandparentPath.node.callee
-          )
-        );
+        const argsOptEligible = !state.deopted &&
+          !// ex: `args[0] = "whatever"`
+          (grandparentPath.isAssignmentExpression() &&
+            parentPath.node === grandparentPath.node.left ||
+            // ex: `[args[0]] = ["whatever"]`
+            grandparentPath.isLVal() ||
+            // ex: `for (rest[0] in this)`
+            // ex: `for (rest[0] of this)`
+            grandparentPath.isForXStatement() ||
+            // ex: `++args[0]`
+            // ex: `args[0]--`
+            grandparentPath.isUpdateExpression() ||
+            // ex: `delete args[0]`
+            grandparentPath.isUnaryExpression({ operator: "delete" }) ||
+            // ex: `args[0]()`
+            // ex: `new args[0]()`
+            // ex: `new args[0]`
+            (grandparentPath.isCallExpression() || grandparentPath.isNewExpression()) &&
+              parentPath.node === grandparentPath.node.callee);
 
         if (argsOptEligible) {
           if (parentPath.node.computed) {
@@ -118,9 +113,8 @@ const memberExpressionOptimisationVisitor = {
               state.candidates.push({ cause: "indexGetter", path });
               return;
             }
-          }
-          // args.length
-          else if (parentPath.node.property.name === "length") {
+          } else if (parentPath.node.property.name === "length") {
+            // args.length
             state.candidates.push({ cause: "lengthGetter", path });
             return;
           }
@@ -175,25 +169,31 @@ function optimiseIndexGetter(path, argsId, offset) {
   if (!scope.isPure(index)) {
     const temp = scope.generateUidIdentifierBasedOnNode(index);
     scope.push({ id: temp, kind: "var" });
-    path.parentPath.replaceWith(restIndexImpure({
-      ARGUMENTS: argsId,
-      INDEX: index,
-      REF: temp
-    }));
+    path.parentPath.replaceWith(
+      restIndexImpure({
+        ARGUMENTS: argsId,
+        INDEX: index,
+        REF: temp
+      })
+    );
   } else {
-    path.parentPath.replaceWith(restIndex({
-      ARGUMENTS: argsId,
-      INDEX: index,
-    }));
+    path.parentPath.replaceWith(
+      restIndex({
+        ARGUMENTS: argsId,
+        INDEX: index
+      })
+    );
   }
 }
 
 function optimiseLengthGetter(path, argsId, offset) {
   if (offset) {
-    path.parentPath.replaceWith(restLength({
-      ARGUMENTS: argsId,
-      OFFSET: t.numericLiteral(offset),
-    }));
+    path.parentPath.replaceWith(
+      restLength({
+        ARGUMENTS: argsId,
+        OFFSET: t.numericLiteral(offset)
+      })
+    );
   } else {
     path.replaceWith(argsId);
   }
@@ -214,10 +214,10 @@ export const visitor = {
     // check and optimise for extremely common cases
     const state = {
       references: [],
-      offset:     node.params.length,
+      offset: node.params.length,
 
       argumentsNode: argsId,
-      outerBinding:  scope.getBindingIdentifier(rest.name),
+      outerBinding: scope.getBindingIdentifier(rest.name),
 
       // candidate member expressions we could optimise if there are no other references
       candidates: [],
@@ -237,7 +237,7 @@ export const visitor = {
       properties is assigned to at the top level, or referenced at all in a
       nested function.
       */
-      deopted: false,
+      deopted: false
     };
 
     path.traverse(memberExpressionOptimisationVisitor, state);
@@ -259,9 +259,7 @@ export const visitor = {
       return;
     }
 
-    state.references = state.references.concat(
-      state.candidates.map(({ path }) => path)
-    );
+    state.references = state.references.concat(state.candidates.map(({ path }) => path));
 
     // deopt shadowed functions as transforms like regenerator may try touch the allocation loop
     state.deopted = state.deopted || !!node.shadow;
@@ -295,10 +293,10 @@ export const visitor = {
       ARGUMENTS: argsId,
       ARRAY_KEY: arrKey,
       ARRAY_LEN: arrLen,
-      START:     start,
-      ARRAY:     rest,
-      KEY:       key,
-      LEN:       len,
+      START: start,
+      ARRAY: rest,
+      KEY: key,
+      LEN: len
     });
 
     if (state.deopted) {
@@ -311,7 +309,7 @@ export const visitor = {
       let target = path.getEarliestCommonAncestorFrom(state.references).getStatementParent();
 
       // don't perform the allocation inside a loop
-      target.findParent((path) => {
+      target.findParent(path => {
         if (path.isLoop()) {
           target = path;
         } else {

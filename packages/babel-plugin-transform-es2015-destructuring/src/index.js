@@ -1,5 +1,4 @@
-export default function ({ types: t }) {
-
+export default function({ types: t }) {
   /**
    * Test if a VariableDeclaration's declarations contains any Patterns.
    */
@@ -38,12 +37,12 @@ export default function ({ types: t }) {
   class DestructuringTransformer {
     constructor(opts) {
       this.blockHoist = opts.blockHoist;
-      this.operator   = opts.operator;
-      this.arrays     = {};
-      this.nodes      = opts.nodes || [];
-      this.scope      = opts.scope;
-      this.file       = opts.file;
-      this.kind       = opts.kind;
+      this.operator = opts.operator;
+      this.arrays = {};
+      this.nodes = opts.nodes || [];
+      this.scope = opts.scope;
+      this.file = opts.file;
+      this.kind = opts.kind;
     }
 
     buildVariableAssignment(id, init) {
@@ -55,9 +54,7 @@ export default function ({ types: t }) {
       if (op) {
         node = t.expressionStatement(t.assignmentExpression(op, id, init));
       } else {
-        node = t.variableDeclaration(this.kind, [
-          t.variableDeclarator(id, init)
-        ]);
+        node = t.variableDeclaration(this.kind, [t.variableDeclarator(id, init)]);
       }
 
       node._blockHoist = this.blockHoist;
@@ -66,9 +63,7 @@ export default function ({ types: t }) {
     }
 
     buildVariableDeclaration(id, init) {
-      const declar = t.variableDeclaration("var", [
-        t.variableDeclarator(id, init)
-      ]);
+      const declar = t.variableDeclaration("var", [t.variableDeclarator(id, init)]);
       declar._blockHoist = this.blockHoist;
       return declar;
     }
@@ -86,7 +81,7 @@ export default function ({ types: t }) {
     }
 
     toArray(node, count) {
-      if (this.file.opts.loose || (t.isIdentifier(node) && this.arrays[node.name])) {
+      if (this.file.opts.loose || t.isIdentifier(node) && this.arrays[node.name]) {
         return node;
       } else {
         return this.scope.toArray(node, count);
@@ -99,9 +94,7 @@ export default function ({ types: t }) {
 
       const tempValueRef = this.scope.generateUidIdentifierBasedOnNode(valueRef);
 
-      const declar = t.variableDeclaration("var", [
-        t.variableDeclarator(tempValueRef, valueRef)
-      ]);
+      const declar = t.variableDeclaration("var", [t.variableDeclarator(tempValueRef, valueRef)]);
       declar._blockHoist = this.blockHoist;
       this.nodes.push(declar);
 
@@ -151,8 +144,10 @@ export default function ({ types: t }) {
 
       //
 
-      const value = t.callExpression(
-        this.file.addHelper("objectWithoutProperties"), [objRef, keys]);
+      const value = t.callExpression(this.file.addHelper("objectWithoutProperties"), [
+        objRef,
+        keys
+      ]);
       this.nodes.push(this.buildVariableAssignment(spreadProp.argument, value));
     }
 
@@ -160,7 +155,7 @@ export default function ({ types: t }) {
       if (t.isLiteral(prop.key)) prop.computed = true;
 
       const pattern = prop.value;
-      const objRef  = t.memberExpression(propRef, prop.key, prop.computed);
+      const objRef = t.memberExpression(propRef, prop.key, prop.computed);
 
       if (t.isPattern(pattern)) {
         this.push(pattern, objRef);
@@ -173,9 +168,11 @@ export default function ({ types: t }) {
       // https://github.com/babel/babel/issues/681
 
       if (!pattern.properties.length) {
-        this.nodes.push(t.expressionStatement(
-          t.callExpression(this.file.addHelper("objectDestructuringEmpty"), [objRef])
-        ));
+        this.nodes.push(
+          t.expressionStatement(
+            t.callExpression(this.file.addHelper("objectDestructuringEmpty"), [objRef])
+          )
+        );
       }
 
       // if we have more than one properties in this pattern and the objectRef is a
@@ -293,8 +290,9 @@ export default function ({ types: t }) {
 
         if (t.isRestElement(elem)) {
           elemRef = this.toArray(arrayRef);
-          elemRef = t.callExpression(t.memberExpression(elemRef, t.identifier("slice")),
-            [t.numericLiteral(i)]);
+          elemRef = t.callExpression(t.memberExpression(elemRef, t.identifier("slice")), [
+            t.numericLiteral(i)
+          ]);
 
           // set the element to the rest element argument since we've dealt with it
           // being a rest already
@@ -327,7 +325,6 @@ export default function ({ types: t }) {
     }
   }
 
-
   return {
     visitor: {
       ExportNamedDeclaration(path) {
@@ -358,15 +355,11 @@ export default function ({ types: t }) {
 
           const temp = scope.generateUidIdentifier("ref");
 
-          node.left = t.variableDeclaration("var", [
-            t.variableDeclarator(temp)
-          ]);
+          node.left = t.variableDeclaration("var", [t.variableDeclarator(temp)]);
 
           path.ensureBlock();
 
-          node.body.body.unshift(t.variableDeclaration("var", [
-            t.variableDeclarator(left, temp)
-          ]));
+          node.body.body.unshift(t.variableDeclaration("var", [t.variableDeclarator(left, temp)]));
 
           return;
         }
@@ -377,9 +370,7 @@ export default function ({ types: t }) {
         if (!t.isPattern(pattern)) return;
 
         const key = scope.generateUidIdentifier("ref");
-        node.left = t.variableDeclaration(left.kind, [
-          t.variableDeclarator(key, null)
-        ]);
+        node.left = t.variableDeclaration(left.kind, [t.variableDeclarator(key, null)]);
 
         const nodes = [];
 
@@ -435,9 +426,7 @@ export default function ({ types: t }) {
         if (path.isCompletionRecord() || !path.parentPath.isExpressionStatement()) {
           ref = scope.generateUidIdentifierBasedOnNode(node.right, "ref");
 
-          nodes.push(t.variableDeclaration("var", [
-            t.variableDeclarator(ref, node.right)
-          ]));
+          nodes.push(t.variableDeclaration("var", [t.variableDeclarator(ref, node.right)]));
 
           if (t.isArrayExpression(node.right)) {
             destructuring.arrays[ref.name] = true;
@@ -466,14 +455,14 @@ export default function ({ types: t }) {
           declar = node.declarations[i];
 
           const patternId = declar.init;
-          const pattern   = declar.id;
+          const pattern = declar.id;
 
           const destructuring = new DestructuringTransformer({
             blockHoist: node._blockHoist,
-            nodes:      nodes,
-            scope:      scope,
-            kind:       node.kind,
-            file:       file
+            nodes: nodes,
+            scope: scope,
+            kind: node.kind,
+            file: file
           });
 
           if (t.isPattern(pattern)) {
@@ -485,8 +474,9 @@ export default function ({ types: t }) {
               t.inherits(nodes[nodes.length - 1], declar);
             }
           } else {
-            nodes.push(t.inherits(
-              destructuring.buildVariableAssignment(declar.id, declar.init), declar));
+            nodes.push(
+              t.inherits(destructuring.buildVariableAssignment(declar.id, declar.init), declar)
+            );
           }
         }
 
@@ -494,7 +484,9 @@ export default function ({ types: t }) {
         for (const node of nodes) {
           const tail = nodesOut[nodesOut.length - 1];
           if (
-            tail && t.isVariableDeclaration(tail) && t.isVariableDeclaration(node) &&
+            tail &&
+            t.isVariableDeclaration(tail) &&
+            t.isVariableDeclaration(node) &&
             tail.kind === node.kind
           ) {
             // Create a single compound let/var rather than many.

@@ -1,6 +1,6 @@
 import leven from "leven";
 
-export default function ({ messages }) {
+export default function({ messages }) {
   return {
     visitor: {
       ReferencedIdentifier(path) {
@@ -8,7 +8,10 @@ export default function ({ messages }) {
 
         const binding = scope.getBinding(node.name);
         if (binding && binding.kind === "type" && !path.parentPath.isFlow()) {
-          throw path.buildCodeFrameError(messages.get("undeclaredVariableType", node.name), ReferenceError);
+          throw path.buildCodeFrameError(
+            messages.get("undeclaredVariableType", node.name),
+            ReferenceError
+          );
         }
 
         if (scope.hasBinding(node.name)) return;

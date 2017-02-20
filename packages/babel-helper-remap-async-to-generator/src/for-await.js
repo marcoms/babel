@@ -2,7 +2,8 @@ import * as t from "babel-types";
 import template from "babel-template";
 import traverse from "babel-traverse";
 
-const buildForAwait = template(`
+const buildForAwait = template(
+  `
   function* wrapper() {
     var ITERATOR_COMPLETION = true;
     var ITERATOR_HAD_ERROR_KEY = false;
@@ -33,7 +34,8 @@ const buildForAwait = template(`
       }
     }
   }
-`);
+`
+);
 
 const forAwaitVisitor = {
   noScope: true,
@@ -54,7 +56,7 @@ const forAwaitVisitor = {
   }
 };
 
-export default function (path, helpers) {
+export default function(path, helpers) {
   const { node, scope, parent } = path;
 
   const stepKey = scope.generateUidIdentifier("step");

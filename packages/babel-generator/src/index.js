@@ -65,7 +65,7 @@ function normalizeOptions(code, opts, tokens): Format {
       style: style,
       base: 0
     },
-    flowCommaSeparator: opts.flowCommaSeparator,
+    flowCommaSeparator: opts.flowCommaSeparator
   };
 
   if (format.minified) {
@@ -73,8 +73,9 @@ function normalizeOptions(code, opts, tokens): Format {
 
     format.shouldPrintComment = format.shouldPrintComment || (() => format.comments);
   } else {
-    format.shouldPrintComment = format.shouldPrintComment || ((value) => format.comments ||
-      (value.indexOf("@license") >= 0 || value.indexOf("@preserve") >= 0));
+    format.shouldPrintComment = format.shouldPrintComment ||
+      (value =>
+        format.comments || (value.indexOf("@license") >= 0 || value.indexOf("@preserve") >= 0));
   }
 
   if (format.compact === "auto") {
@@ -144,7 +145,7 @@ export class CodeGenerator {
   }
 }
 
-export default function (ast: Object, opts: Object, code: string): Object {
+export default function(ast: Object, opts: Object, code: string): Object {
   const gen = new Generator(ast, opts, code);
   return gen.generate();
 }

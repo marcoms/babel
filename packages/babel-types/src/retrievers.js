@@ -10,7 +10,7 @@ export function getBindingIdentifiers(
   outerOnly?: boolean
 ): Object {
   let search = [].concat(node);
-  const ids    = Object.create(null);
+  const ids = Object.create(null);
 
   while (search.length) {
     const id = search.shift();
@@ -105,9 +105,6 @@ getBindingIdentifiers.keys = {
   VariableDeclarator: ["id"]
 };
 
-export function getOuterBindingIdentifiers(
-  node: Object,
-  duplicates?: boolean,
-): Object {
+export function getOuterBindingIdentifiers(node: Object, duplicates?: boolean): Object {
   return getBindingIdentifiers(node, duplicates, true);
 }

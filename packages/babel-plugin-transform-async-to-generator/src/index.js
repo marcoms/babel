@@ -1,6 +1,6 @@
 import remapAsyncToGenerator from "babel-helper-remap-async-to-generator";
 
-export default function () {
+export default function() {
   return {
     inherits: require("babel-plugin-syntax-async-functions"),
 

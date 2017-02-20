@@ -1,4 +1,4 @@
-export default function ({ types: t }) {
+export default function({ types: t }) {
   function hasRestProperty(path) {
     let foundRestProperty = false;
     path.traverse({
@@ -11,7 +11,7 @@ export default function ({ types: t }) {
   }
 
   function hasSpread(node) {
-    for (const prop of (node.properties)) {
+    for (const prop of node.properties) {
       if (t.isSpreadProperty(prop)) {
         return true;
       }
@@ -33,12 +33,7 @@ export default function ({ types: t }) {
 
     return [
       restProperty.argument,
-      t.callExpression(
-        file.addHelper("objectWithoutProperties"), [
-          objRef,
-          t.arrayExpression(keys)
-        ]
-      )
+      t.callExpression(file.addHelper("objectWithoutProperties"), [objRef, t.arrayExpression(keys)])
     ];
   }
 
@@ -51,9 +46,7 @@ export default function ({ types: t }) {
     if (paramPath.isObjectPattern() && hasRestProperty(paramPath)) {
       const uid = parentPath.scope.generateUidIdentifier("ref");
 
-      const declar = t.variableDeclaration("let", [
-        t.variableDeclarator(paramPath.node, uid)
-      ]);
+      const declar = t.variableDeclaration("let", [t.variableDeclarator(paramPath.node, uid)]);
       declar._blockHoist = i ? numParams - i : 1;
 
       parentPath.ensureBlock();
@@ -77,7 +70,9 @@ export default function ({ types: t }) {
       // adapted from transform-es2015-destructuring/src/index.js#pushObjectRest
       // const { a, ...b } = c;
       VariableDeclarator(path, file) {
-        if (!path.get("id").isObjectPattern()) { return; }
+        if (!path.get("id").isObjectPattern()) {
+          return;
+        }
 
         let insertionPath = path;
 
@@ -95,20 +90,24 @@ export default function ({ types: t }) {
               // const _foo = foo(),
               //       { a, ...b } = _foo;
               const initRef = path.scope.generateUidIdentifierBasedOnNode(
-                this.originalPath.node.init, "ref");
+                this.originalPath.node.init,
+                "ref"
+              );
               // insert _foo = foo()
-              this.originalPath.insertBefore(t.variableDeclarator(initRef,
-                this.originalPath.node.init));
+              this.originalPath.insertBefore(
+                t.variableDeclarator(initRef, this.originalPath.node.init)
+              );
               // replace foo() with _foo
-              this.originalPath.replaceWith(t.variableDeclarator(
-                this.originalPath.node.id, initRef));
+              this.originalPath.replaceWith(
+                t.variableDeclarator(this.originalPath.node.id, initRef)
+              );
 
               return;
             }
 
             let ref = this.originalPath.node.init;
 
-            path.findParent((path) => {
+            path.findParent(path => {
               if (path.isObjectProperty()) {
                 ref = t.memberExpression(ref, t.identifier(path.node.key.name));
               } else if (path.isVariableDeclarator()) {
@@ -116,25 +115,20 @@ export default function ({ types: t }) {
               }
             });
 
-            const [ argument, callExpression ] = createObjectSpread(
+            const [argument, callExpression] = createObjectSpread(
               file,
               path.parentPath.node.properties,
               ref
             );
 
-            insertionPath.insertAfter(
-              t.variableDeclarator(
-                argument,
-                callExpression
-              )
-            );
+            insertionPath.insertAfter(t.variableDeclarator(argument, callExpression));
 
             insertionPath = insertionPath.getSibling(insertionPath.key + 1);
 
             if (path.parentPath.node.properties.length === 0) {
-              path.findParent(
-                (path) => path.isObjectProperty() || path.isVariableDeclarator()
-              ).remove();
+              path
+                .findParent(path => path.isObjectProperty() || path.isVariableDeclarator())
+                .remove();
             }
           }
         }, {
@@ -176,12 +170,10 @@ export default function ({ types: t }) {
           if (path.isCompletionRecord() || path.parentPath.isExpressionStatement()) {
             ref = path.scope.generateUidIdentifierBasedOnNode(path.node.right, "ref");
 
-            nodes.push(t.variableDeclaration("var", [
-              t.variableDeclarator(ref, path.node.right)
-            ]));
+            nodes.push(t.variableDeclaration("var", [t.variableDeclarator(ref, path.node.right)]));
           }
 
-          const [ argument, callExpression ] = createObjectSpread(
+          const [argument, callExpression] = createObjectSpread(
             file,
             path.node.left.properties,
             ref
@@ -190,11 +182,7 @@ export default function ({ types: t }) {
           const nodeWithoutSpread = t.clone(path.node);
           nodeWithoutSpread.right = ref;
           nodes.push(t.expressionStatement(nodeWithoutSpread));
-          nodes.push(t.toStatement(t.assignmentExpression(
-            "=",
-            argument,
-            callExpression
-          )));
+          nodes.push(t.toStatement(t.assignmentExpression("=", argument, callExpression)));
 
           if (ref) {
             nodes.push(t.expressionStatement(ref));
@@ -213,15 +201,11 @@ export default function ({ types: t }) {
         if (t.isObjectPattern(left) && hasRestProperty(leftPath)) {
           const temp = scope.generateUidIdentifier("ref");
 
-          node.left = t.variableDeclaration("var", [
-            t.variableDeclarator(temp)
-          ]);
+          node.left = t.variableDeclaration("var", [t.variableDeclarator(temp)]);
 
           path.ensureBlock();
 
-          node.body.body.unshift(t.variableDeclaration("var", [
-            t.variableDeclarator(left, temp)
-          ]));
+          node.body.body.unshift(t.variableDeclaration("var", [t.variableDeclarator(left, temp)]));
 
           return;
         }
@@ -232,16 +216,12 @@ export default function ({ types: t }) {
         if (!t.isObjectPattern(pattern)) return;
 
         const key = scope.generateUidIdentifier("ref");
-        node.left = t.variableDeclaration(left.kind, [
-          t.variableDeclarator(key, null)
-        ]);
+        node.left = t.variableDeclaration(left.kind, [t.variableDeclarator(key, null)]);
 
         path.ensureBlock();
 
         node.body.body.unshift(
-          t.variableDeclaration(node.left.kind, [
-            t.variableDeclarator(pattern, key)
-          ])
+          t.variableDeclaration(node.left.kind, [t.variableDeclarator(pattern, key)])
         );
       },
       // var a = { ...b, ...c }
@@ -250,8 +230,10 @@ export default function ({ types: t }) {
 
         const useBuiltIns = file.opts.useBuiltIns || false;
         if (typeof useBuiltIns !== "boolean") {
-          throw new Error("transform-object-rest-spread currently only accepts a boolean " +
-            "option for useBuiltIns (defaults to false)");
+          throw new Error(
+            "transform-object-rest-spread currently only accepts a boolean " +
+              "option for useBuiltIns (defaults to false)"
+          );
         }
 
         const args = [];
@@ -278,9 +260,9 @@ export default function ({ types: t }) {
           args.unshift(t.objectExpression([]));
         }
 
-        const helper = useBuiltIns ?
-          t.memberExpression(t.identifier("Object"), t.identifier("assign")) :
-          file.addHelper("extends");
+        const helper = useBuiltIns
+          ? t.memberExpression(t.identifier("Object"), t.identifier("assign"))
+          : file.addHelper("extends");
 
         path.replaceWith(t.callExpression(helper, args));
       }

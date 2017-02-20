@@ -10,7 +10,8 @@ import transformES2015TemplateLiterals from "babel-plugin-transform-es2015-templ
 import transformES2015Literals from "babel-plugin-transform-es2015-literals";
 import transformES2015FunctionName from "babel-plugin-transform-es2015-function-name";
 import transformES2015ArrowFunctions from "babel-plugin-transform-es2015-arrow-functions";
-import transformES2015BlockScopedFunctions from "babel-plugin-transform-es2015-block-scoped-functions";
+import transformES2015BlockScopedFunctions
+  from "babel-plugin-transform-es2015-block-scoped-functions";
 import transformES2015Classes from "babel-plugin-transform-es2015-classes";
 import transformES2015ObjectSuper from "babel-plugin-transform-es2015-object-super";
 import transformES2015ShorthandProperties from "babel-plugin-transform-es2015-shorthand-properties";
@@ -43,11 +44,14 @@ function preset(context, opts = {}) {
     if (opts.spec !== undefined) spec = opts.spec;
   }
 
-  if (typeof loose !== "boolean") throw new Error("Preset es2015 'loose' option must be a boolean.");
+  if (typeof loose !== "boolean")
+    throw new Error("Preset es2015 'loose' option must be a boolean.");
   if (typeof spec !== "boolean") throw new Error("Preset es2015 'spec' option must be a boolean.");
   if (modules !== false && moduleTypes.indexOf(modules) === -1) {
-    throw new Error("Preset es2015 'modules' option must be 'false' to indicate no modules\n" +
-      "or a module type which be be one of: 'commonjs' (default), 'amd', 'umd', 'systemjs'");
+    throw new Error(
+      "Preset es2015 'modules' option must be 'false' to indicate no modules\n" +
+        "or a module type which be be one of: 'commonjs' (default), 'amd', 'umd', 'systemjs'"
+    );
   }
 
   // be DRY
@@ -101,5 +105,5 @@ Object.defineProperty(oldConfig, "buildPreset", {
   // We make this non-enumerable so old versions of babel-core won't see it as an unknown property,
   // while allowing new versions to see it as a preset builder function.
   enumerable: false,
-  value: preset,
+  value: preset
 });

@@ -1,6 +1,7 @@
 import template from "babel-template";
 
-const buildWrapper = template(`
+const buildWrapper = template(
+  `
   let CLASS_REF = CLASS;
   var CALL_REF = CALL;
   var WRAPPER_REF = function (...args) {
@@ -12,9 +13,10 @@ const buildWrapper = template(`
   };
   WRAPPER_REF.__proto__ = CLASS_REF;
   WRAPPER_REF;
-`);
+`
+);
 
-export default function ({ types: t }) {
+export default function({ types: t }) {
   const ALREADY_VISITED = Symbol();
 
   function findConstructorCall(path): ?Object {
@@ -38,13 +40,15 @@ export default function ({ types: t }) {
       classPath.insertAfter(t.exportDefaultDeclaration(ref));
     }
 
-    classPath.replaceWithMultiple(buildWrapper({
-      CLASS_REF: classPath.scope.generateUidIdentifier(ref.name),
-      CALL_REF: classPath.scope.generateUidIdentifier(`${ref.name}Call`),
-      CALL: t.functionExpression(null, constructorCall.node.params, constructorCall.node.body),
-      CLASS: t.toExpression(node),
-      WRAPPER_REF: ref
-    }));
+    classPath.replaceWithMultiple(
+      buildWrapper({
+        CLASS_REF: classPath.scope.generateUidIdentifier(ref.name),
+        CALL_REF: classPath.scope.generateUidIdentifier(`${ref.name}Call`),
+        CALL: t.functionExpression(null, constructorCall.node.params, constructorCall.node.body),
+        CLASS: t.toExpression(node),
+        WRAPPER_REF: ref
+      })
+    );
 
     constructorCall.remove();
   }

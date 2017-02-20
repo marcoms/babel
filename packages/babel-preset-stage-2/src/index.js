@@ -5,12 +5,6 @@ import transformDecorators from "babel-plugin-transform-decorators";
 import syntaxDynamicImport from "babel-plugin-syntax-dynamic-import";
 
 export default {
-  presets: [
-    presetStage3
-  ],
-  plugins: [
-    syntaxDynamicImport,
-    transformClassProperties,
-    transformDecorators
-  ]
+  presets: [presetStage3],
+  plugins: [syntaxDynamicImport, transformClassProperties, transformDecorators]
 };

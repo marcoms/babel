@@ -19,13 +19,15 @@ export default function bindifyDecorators(decorators: Array<NodePath>): Array<No
       ref = expression.object;
     }
 
-    nodes.push(t.callExpression(
-      t.memberExpression(
-        t.memberExpression(ref, expression.property, expression.computed),
-        t.identifier("bind")
-      ),
-      [ref]
-    ));
+    nodes.push(
+      t.callExpression(
+        t.memberExpression(
+          t.memberExpression(ref, expression.property, expression.computed),
+          t.identifier("bind")
+        ),
+        [ref]
+      )
+    );
 
     if (nodes.length === 1) {
       decorator.expression = nodes[0];
