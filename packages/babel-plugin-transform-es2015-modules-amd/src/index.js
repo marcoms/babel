@@ -58,7 +58,7 @@ export default function({ types: t }) {
       this.sources.push([id.node, source]);
 
       path.remove();
-    }
+    },
   };
 
   return {
@@ -109,7 +109,7 @@ export default function({ types: t }) {
           const { node } = path;
           const factory = buildFactory({
             PARAMS: params,
-            BODY: node.body
+            BODY: node.body,
           });
           factory.expression.body.directives = node.directives;
           node.directives = [];
@@ -118,11 +118,11 @@ export default function({ types: t }) {
             buildDefine({
               MODULE_NAME: moduleName,
               SOURCES: sources,
-              FACTORY: factory
-            })
+              FACTORY: factory,
+            }),
           ];
-        }
-      }
-    }
+        },
+      },
+    },
   };
 }

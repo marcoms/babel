@@ -19,7 +19,7 @@ function getDefs(chalk) {
     comment: chalk.grey,
     invalid: chalk.white.bgRed.bold,
     gutter: chalk.grey,
-    marker: chalk.red.bold
+    marker: chalk.red.bold,
   };
 }
 
@@ -96,7 +96,7 @@ export default function(
   rawLines: string,
   lineNumber: number,
   colNumber: ?number,
-  opts: Object = {}
+  opts: Object = {},
 ): string {
   colNumber = Math.max(colNumber, 0);
 
@@ -139,14 +139,14 @@ export default function(
             "\n ",
             maybeHighlight(defs.gutter, gutter.replace(/\d/g, " ")),
             markerSpacing,
-            maybeHighlight(defs.marker, "^")
+            maybeHighlight(defs.marker, "^"),
           ].join("");
         }
         return [
           maybeHighlight(defs.marker, ">"),
           maybeHighlight(defs.gutter, gutter),
           line,
-          markerLine
+          markerLine,
         ].join("");
       } else {
         return ` ${maybeHighlight(defs.gutter, gutter)}${line}`;

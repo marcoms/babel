@@ -43,7 +43,7 @@ export default function({ messages }) {
         //
 
         throw path.buildCodeFrameError(msg, ReferenceError);
-      }
-    }
+      },
+    },
   };
 }

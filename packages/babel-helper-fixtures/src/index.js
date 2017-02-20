@@ -14,7 +14,7 @@ function humanize(val, noext) {
 type TestFile = {
   loc: string,
   code: string,
-  filename: string
+  filename: string,
 };
 
 type Test = {
@@ -23,14 +23,14 @@ type Test = {
   options: Object,
   exec: TestFile,
   actual: TestFile,
-  expected: TestFile
+  expected: TestFile,
 };
 
 type Suite = {
   options: Object,
   tests: Array<Test>,
   title: string,
-  filename: string
+  filename: string,
 };
 
 function assertDirectory(loc) {
@@ -64,7 +64,7 @@ export default function get(entryLoc): Array<Suite> {
       options: clone(rootOpts),
       tests: [],
       title: humanize(suiteName),
-      filename: entryLoc + "/" + suiteName
+      filename: entryLoc + "/" + suiteName,
     };
 
     assertDirectory(suite.filename);
@@ -111,18 +111,18 @@ export default function get(entryLoc): Array<Suite> {
         exec: {
           loc: execLoc,
           code: readFile(execLoc),
-          filename: execLocAlias
+          filename: execLocAlias,
         },
         actual: {
           loc: actualLoc,
           code: readFile(actualLoc),
-          filename: actualLocAlias
+          filename: actualLocAlias,
         },
         expect: {
           loc: expectLoc,
           code: readFile(expectLoc),
-          filename: expectLocAlias
-        }
+          filename: expectLocAlias,
+        },
       };
 
       // traceur checks

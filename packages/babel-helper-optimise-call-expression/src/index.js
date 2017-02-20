@@ -9,7 +9,7 @@ export default function(callee, thisNode, args) {
     // eg. super(...arguments);
     return t.callExpression(t.memberExpression(callee, t.identifier("apply")), [
       thisNode,
-      args[0].argument
+      args[0].argument,
     ]);
   } else {
     return t.callExpression(t.memberExpression(callee, t.identifier("call")), [thisNode, ...args]);

@@ -9,7 +9,7 @@ module.exports = {
     Observable: "observable",
     setImmediate: "set-immediate",
     clearImmediate: "clear-immediate",
-    asap: "asap"
+    asap: "asap",
     //parseFloat: "parse-float", // temporary disabled
     //parseInt: "parse-int" // temporary disabled
   },
@@ -45,11 +45,11 @@ module.exports = {
       sort: "array/sort",
       splice: "array/splice",
       unshift: "array/unshift", // deprecated
-      values: "array/values"
+      values: "array/values",
     },
 
     JSON: {
-      stringify: "json/stringify"
+      stringify: "json/stringify",
     },
 
     Object: {
@@ -72,11 +72,11 @@ module.exports = {
       preventExtensions: "object/prevent-extensions",
       seal: "object/seal",
       setPrototypeOf: "object/set-prototype-of",
-      values: "object/values"
+      values: "object/values",
     },
 
     RegExp: {
-      escape: "regexp/escape" // deprecated
+      escape: "regexp/escape", // deprecated
     },
 
     Math: {
@@ -100,7 +100,7 @@ module.exports = {
       iaddh: "math/iaddh",
       isubh: "math/isubh",
       imulh: "math/imulh",
-      umulh: "math/umulh"
+      umulh: "math/umulh",
     },
 
     Symbol: {
@@ -116,7 +116,7 @@ module.exports = {
       split: "symbol/split",
       toPrimitive: "symbol/to-primitive",
       toStringTag: "symbol/to-string-tag",
-      unscopables: "symbol/unscopables"
+      unscopables: "symbol/unscopables",
     },
 
     String: {
@@ -137,7 +137,7 @@ module.exports = {
       trimLeft: "string/trim-left",
       trimRight: "string/trim-right",
       trimStart: "string/trim-start",
-      trimEnd: "string/trim-end"
+      trimEnd: "string/trim-end",
     },
 
     Number: {
@@ -149,7 +149,7 @@ module.exports = {
       MAX_SAFE_INTEGER: "number/max-safe-integer",
       MIN_SAFE_INTEGER: "number/min-safe-integer",
       parseFloat: "number/parse-float",
-      parseInt: "number/parse-int"
+      parseInt: "number/parse-int",
     },
 
     Reflect: {
@@ -175,15 +175,15 @@ module.exports = {
       getOwnMetadataKeys: "reflect/get-own-metadata-keys",
       hasMetadata: "reflect/has-metadata",
       hasOwnMetadata: "reflect/has-own-metadata",
-      metadata: "reflect/metadata"
+      metadata: "reflect/metadata",
     },
 
     System: {
-      global: "system/global"
+      global: "system/global",
     },
 
     Error: {
-      isError: "error/is-error" // deprecated
+      isError: "error/is-error", // deprecated
     },
 
     Date: {
@@ -193,6 +193,6 @@ module.exports = {
     Function: {
       // Warning: /virtual/ method - prototype, not static, version
       //bind: "function/virtual/bind" // temporary disabled
-    }
-  }
+    },
+  },
 };

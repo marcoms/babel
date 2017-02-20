@@ -147,7 +147,7 @@ const memberExpressionOptimisationVisitor = {
     if (node.name === state.name) {
       state.deopted = true;
     }
-  }
+  },
 };
 function hasRest(node) {
   return t.isRestElement(node.params[node.params.length - 1]);
@@ -173,14 +173,14 @@ function optimiseIndexGetter(path, argsId, offset) {
       restIndexImpure({
         ARGUMENTS: argsId,
         INDEX: index,
-        REF: temp
+        REF: temp,
       })
     );
   } else {
     path.parentPath.replaceWith(
       restIndex({
         ARGUMENTS: argsId,
-        INDEX: index
+        INDEX: index,
       })
     );
   }
@@ -191,7 +191,7 @@ function optimiseLengthGetter(path, argsId, offset) {
     path.parentPath.replaceWith(
       restLength({
         ARGUMENTS: argsId,
-        OFFSET: t.numericLiteral(offset)
+        OFFSET: t.numericLiteral(offset),
       })
     );
   } else {
@@ -237,7 +237,7 @@ export const visitor = {
       properties is assigned to at the top level, or referenced at all in a
       nested function.
       */
-      deopted: false
+      deopted: false,
     };
 
     path.traverse(memberExpressionOptimisationVisitor, state);
@@ -296,7 +296,7 @@ export const visitor = {
       START: start,
       ARRAY: rest,
       KEY: key,
-      LEN: len
+      LEN: len,
     });
 
     if (state.deopted) {
@@ -320,5 +320,5 @@ export const visitor = {
 
       target.insertBefore(loop);
     }
-  }
+  },
 };

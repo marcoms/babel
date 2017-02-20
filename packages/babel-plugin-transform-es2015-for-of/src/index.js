@@ -67,7 +67,7 @@ export default function({ messages, template, types: t }) {
     let loop = buildForOfArray({
       BODY: node.body,
       KEY: iterationKey,
-      ARR: right
+      ARR: right,
     });
 
     t.inherits(loop, node);
@@ -134,8 +134,8 @@ export default function({ messages, template, types: t }) {
         } else {
           path.replaceWithMultiple(build.node);
         }
-      }
-    }
+      },
+    },
   };
 
   function loose(path, file) {
@@ -150,7 +150,7 @@ export default function({ messages, template, types: t }) {
       // for (let i of test)
       id = scope.generateUidIdentifier("ref");
       declar = t.variableDeclaration(left.kind, [
-        t.variableDeclarator(left.declarations[0].id, id)
+        t.variableDeclarator(left.declarations[0].id, id),
       ]);
     } else {
       throw file.buildCodeFrameError(left, messages.get("unknownForHead", left.type));
@@ -164,7 +164,7 @@ export default function({ messages, template, types: t }) {
       IS_ARRAY: isArrayKey,
       OBJECT: node.right,
       INDEX: scope.generateUidIdentifier("i"),
-      ID: id
+      ID: id,
     });
 
     if (!declar) {
@@ -185,7 +185,7 @@ export default function({ messages, template, types: t }) {
       replaceParent: isLabeledParent,
       declar: declar,
       node: labeled || loop,
-      loop: loop
+      loop: loop,
     };
   }
 
@@ -203,7 +203,7 @@ export default function({ messages, template, types: t }) {
     } else if (t.isVariableDeclaration(left)) {
       // for (let i of test)
       declar = t.variableDeclaration(left.kind, [
-        t.variableDeclarator(left.declarations[0].id, stepValue)
+        t.variableDeclarator(left.declarations[0].id, stepValue),
       ]);
     } else {
       throw file.buildCodeFrameError(left, messages.get("unknownForHead", left.type));
@@ -220,7 +220,7 @@ export default function({ messages, template, types: t }) {
       ITERATOR_KEY: iteratorKey,
       STEP_KEY: stepKey,
       OBJECT: node.right,
-      BODY: null
+      BODY: null,
     });
 
     const isLabeledParent = t.isLabeledStatement(parent);
@@ -238,7 +238,7 @@ export default function({ messages, template, types: t }) {
       replaceParent: isLabeledParent,
       declar: declar,
       loop: loop,
-      node: template
+      node: template,
     };
   }
 }

@@ -46,7 +46,7 @@ export default function({ types: t }) {
         CALL_REF: classPath.scope.generateUidIdentifier(`${ref.name}Call`),
         CALL: t.functionExpression(null, constructorCall.node.params, constructorCall.node.body),
         CLASS: t.toExpression(node),
-        WRAPPER_REF: ref
+        WRAPPER_REF: ref,
       })
     );
 
@@ -68,7 +68,7 @@ export default function({ types: t }) {
         } else {
           return;
         }
-      }
-    }
+      },
+    },
   };
 }

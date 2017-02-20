@@ -63,9 +63,9 @@ function normalizeOptions(code, opts, tokens): Format {
     indent: {
       adjustMultilineComment: true,
       style: style,
-      base: 0
+      base: 0,
     },
-    flowCommaSeparator: opts.flowCommaSeparator
+    flowCommaSeparator: opts.flowCommaSeparator,
   };
 
   if (format.minified) {
@@ -104,7 +104,7 @@ function findCommonStringDelimiter(code, tokens) {
 
   const occurences = {
     single: 0,
-    double: 0
+    double: 0,
   };
 
   let checked = 0;

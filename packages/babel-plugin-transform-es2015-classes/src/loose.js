@@ -27,7 +27,7 @@ export default class LooseClassTransformer extends VanillaTransformer {
         func = nameFunction({
           node: func,
           id: key,
-          scope
+          scope,
         });
       }
 

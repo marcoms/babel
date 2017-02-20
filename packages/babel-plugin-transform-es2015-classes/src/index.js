@@ -43,7 +43,7 @@ export default function({ types: t }) {
         if (state.opts.loose) Constructor = LooseTransformer;
 
         path.replaceWith(new Constructor(path, state.file).run());
-      }
-    }
+      },
+    },
   };
 }

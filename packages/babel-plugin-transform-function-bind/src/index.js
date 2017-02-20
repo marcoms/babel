@@ -20,7 +20,7 @@ export default function({ types: t }) {
     if (bind.object) {
       bind.callee = t.sequenceExpression([
         t.assignmentExpression("=", tempId, bind.object),
-        bind.callee
+        bind.callee,
       ]);
     } else {
       bind.callee.object = t.assignmentExpression("=", tempId, bind.callee.object);
@@ -47,7 +47,7 @@ export default function({ types: t }) {
         path.replaceWith(
           t.callExpression(t.memberExpression(node.callee, t.identifier("bind")), [context])
         );
-      }
-    }
+      },
+    },
   };
 }

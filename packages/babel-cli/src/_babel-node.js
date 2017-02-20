@@ -35,7 +35,7 @@ register({
   ignore: program.ignore,
   only: program.only,
   plugins: program.plugins,
-  presets: program.presets
+  presets: program.presets,
 });
 
 //
@@ -58,8 +58,8 @@ const replPlugin = ({ types: t }) => ({
       // If the executed code doesn't evaluate to a value,
       // prevent implicit strict mode from printing 'use strict'.
       path.pushContainer("body", t.expressionStatement(t.identifier("undefined")));
-    }
-  }
+    },
+  },
 });
 
 //
@@ -71,11 +71,11 @@ const _eval = function(code, filename) {
   code = babel.transform(code, {
     filename: filename,
     presets: program.presets,
-    plugins: (program.plugins || []).concat([replPlugin])
+    plugins: (program.plugins || []).concat([replPlugin]),
   }).code;
 
   return vm.runInThisContext(code, {
-    filename: filename
+    filename: filename,
   });
 };
 
@@ -144,7 +144,7 @@ function replStart() {
     input: process.stdin,
     output: process.stdout,
     eval: replEval,
-    useGlobal: true
+    useGlobal: true,
   });
 }
 

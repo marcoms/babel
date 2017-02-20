@@ -48,7 +48,7 @@ function run(task) {
   function getOpts(self) {
     const newOpts = merge(
       {
-        filename: self.loc
+        filename: self.loc,
       },
       opts
     );
@@ -135,7 +135,7 @@ function runExec(opts, execCode, execDirname) {
     exports: {},
     require(id) {
       return require(id[0] === "." ? path.resolve(execDirname, id) : id);
-    }
+    },
   };
 
   const fn = new Function(...Object.keys(sandbox), execCode);
@@ -147,7 +147,7 @@ export default function(
   name: string,
   suiteOpts = {},
   taskOpts = {},
-  dynamicOpts?: Function
+  dynamicOpts?: Function,
 ) {
   const suites = getFixtures(fixturesLoc);
 
@@ -176,7 +176,7 @@ export default function(
                 sourceMapTarget: task.expect.filename,
                 suppressDeprecationMessages: true,
                 babelrc: false,
-                sourceMap: !!(task.sourceMappings || task.sourceMap)
+                sourceMap: !!(task.sourceMappings || task.sourceMap),
               });
 
               extend(task.options, taskOpts);

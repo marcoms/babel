@@ -26,7 +26,7 @@ export default function({ types: t }) {
         nodes.push(
           buildClassDecorator({
             CLASS_REF: ref,
-            DECORATOR: decorator
+            DECORATOR: decorator,
           })
         );
       }
@@ -133,7 +133,7 @@ The repo url is: https://github.com/loganfsmyth/babel-plugin-transform-decorator
       ObjectExpression(path) {
         if (!hasDecorators(path)) return;
         doError(path);
-      }
-    }
+      },
+    },
   };
 }

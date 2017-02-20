@@ -51,10 +51,10 @@ export default function(
   nodes: Array<Object>,
   file,
   scope: Scope,
-  allowedSingleIdent?: boolean
+  allowedSingleIdent?: boolean,
 ): {
   uid: Object,
-  ref: Object
+  ref: Object,
 } {
   let obj;
   if (t.isIdentifier(node) && allowedSingleIdent) {
@@ -76,6 +76,6 @@ export default function(
 
   return {
     uid: uid,
-    ref: ref
+    ref: ref,
   };
 }

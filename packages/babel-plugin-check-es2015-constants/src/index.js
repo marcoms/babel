@@ -10,7 +10,7 @@ export default function({ messages }) {
             throw violation.buildCodeFrameError(messages.get("readOnly", name));
           }
         }
-      }
-    }
+      },
+    },
   };
 }

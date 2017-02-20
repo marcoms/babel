@@ -50,7 +50,7 @@ const awaitVisitor = {
 
     const build = rewriteForAwait(path, {
       getAsyncIterator: file.addHelper("asyncIterator"),
-      wrapAwait
+      wrapAwait,
     });
 
     const { declar, loop } = build;
@@ -76,7 +76,7 @@ const awaitVisitor = {
     } else {
       path.replaceWithMultiple(build.node);
     }
-  }
+  },
 };
 
 function classOrObjectMethod(path: NodePath, callId: Object) {
@@ -132,14 +132,14 @@ function plainFunction(path: NodePath, callId: Object) {
       },
       {
         params: [],
-        done: false
+        done: false,
       }
-    ).params
+    ).params,
   }).expression;
 
   if (isDeclaration) {
     const declar = t.variableDeclaration("let", [
-      t.variableDeclarator(t.identifier(asyncFnId.name), t.callExpression(container, []))
+      t.variableDeclarator(t.identifier(asyncFnId.name), t.callExpression(container, [])),
     ]);
     declar._blockHoist = true;
 
@@ -150,7 +150,7 @@ function plainFunction(path: NodePath, callId: Object) {
       nameFunction({
         node: retFunction,
         parent: path.parent,
-        scope: path.scope
+        scope: path.scope,
       });
     }
 
@@ -172,7 +172,7 @@ export default function(path: NodePath, file: Object, helpers: Object) {
   }
   path.traverse(awaitVisitor, {
     file,
-    wrapAwait: helpers.wrapAwait
+    wrapAwait: helpers.wrapAwait,
   });
 
   if (path.isClassMethod() || path.isObjectMethod()) {

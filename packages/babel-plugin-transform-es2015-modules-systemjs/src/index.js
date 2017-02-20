@@ -67,7 +67,7 @@ export default function({ types: t }) {
       if (isPostUpdateExpression) node = t.sequenceExpression([node, path.node]);
 
       path.replaceWith(node);
-    }
+    },
   };
 
   return {
@@ -259,7 +259,7 @@ export default function({ types: t }) {
 
               setterBody.push(
                 t.variableDeclaration("var", [
-                  t.variableDeclarator(exportObjRef, t.objectExpression([]))
+                  t.variableDeclarator(exportObjRef, t.objectExpression([])),
                 ])
               );
 
@@ -269,7 +269,7 @@ export default function({ types: t }) {
                     buildExportAll({
                       KEY: path.scope.generateUidIdentifier("key"),
                       EXPORT_OBJ: exportObjRef,
-                      TARGET: target
+                      TARGET: target,
                     })
                   );
                 } else if (t.isExportSpecifier(node)) {
@@ -310,7 +310,7 @@ export default function({ types: t }) {
           path.traverse(reassignmentVisitor, {
             exports: exportNames,
             buildCall: buildExportCall,
-            scope: path.scope
+            scope: path.scope,
           });
 
           for (const path of removedPaths) {
@@ -329,11 +329,11 @@ export default function({ types: t }) {
               SOURCES: sources,
               BODY: path.node.body,
               EXPORT_IDENTIFIER: exportIdent,
-              CONTEXT_IDENTIFIER: contextIdent
-            })
+              CONTEXT_IDENTIFIER: contextIdent,
+            }),
           ];
-        }
-      }
-    }
+        },
+      },
+    },
   };
 }

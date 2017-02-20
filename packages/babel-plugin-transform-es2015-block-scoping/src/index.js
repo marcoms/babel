@@ -60,8 +60,8 @@ export default function() {
           const blockScoping = new BlockScoping(null, path, path.parent, path.scope, file);
           blockScoping.run();
         }
-      }
-    }
+      },
+    },
   };
 }
 
@@ -121,7 +121,7 @@ const letReferenceBlockVisitor = traverse.visitors.merge([
       },
       exit(path, state) {
         state.loopDepth--;
-      }
+      },
     },
     Function(path, state) {
       // References to block-scoped variables only require added closures if it's
@@ -131,9 +131,9 @@ const letReferenceBlockVisitor = traverse.visitors.merge([
         path.traverse(letReferenceFunctionVisitor, state);
       }
       return path.skip();
-    }
+    },
   },
-  tdzVisitor
+  tdzVisitor,
 ]);
 
 const letReferenceFunctionVisitor = traverse.visitors.merge([
@@ -150,9 +150,9 @@ const letReferenceFunctionVisitor = traverse.visitors.merge([
       if (localBinding && localBinding !== ref) return;
 
       state.closurify = true;
-    }
+    },
   },
-  tdzVisitor
+  tdzVisitor,
 ]);
 
 const hoistVarDeclarationsVisitor = {
@@ -178,13 +178,13 @@ const hoistVarDeclarationsVisitor = {
     } else if (path.isFunction()) {
       return path.skip();
     }
-  }
+  },
 };
 
 const loopLabelVisitor = {
   LabeledStatement({ node }, state) {
     state.innerLabels.push(node.label.name);
-  }
+  },
 };
 
 const continuationVisitor = {
@@ -196,7 +196,7 @@ const continuationVisitor = {
         state.reassignments[name] = true;
       }
     }
-  }
+  },
 };
 
 function loopNodeTo(node) {
@@ -263,7 +263,7 @@ const loopVisitor = {
     if (path.isReturnStatement()) {
       state.hasReturn = true;
       replace = t.objectExpression([
-        t.objectProperty(t.identifier("v"), node.argument || scope.buildUndefinedNode())
+        t.objectProperty(t.identifier("v"), node.argument || scope.buildUndefinedNode()),
       ]);
     }
 
@@ -273,7 +273,7 @@ const loopVisitor = {
       path.skip();
       path.replaceWith(t.inherits(replace, node));
     }
-  }
+  },
 };
 
 class BlockScoping {
@@ -485,7 +485,7 @@ class BlockScoping {
   addContinuations(fn) {
     const state = {
       reassignments: {},
-      outsideReferences: this.outsideLetReferences
+      outsideReferences: this.outsideLetReferences,
     };
 
     this.scope.traverse(fn, continuationVisitor, state);
@@ -569,7 +569,7 @@ class BlockScoping {
       letReferences: this.letReferences,
       closurify: false,
       file: this.file,
-      loopDepth: 0
+      loopDepth: 0,
     };
 
     const loopOrFunctionParent = this.blockPath.find(path => path.isLoop() || path.isFunction());
@@ -602,7 +602,7 @@ class BlockScoping {
       hasReturn: false,
       isLoop: !!this.loop,
       map: {},
-      LOOP_IGNORE: Symbol()
+      LOOP_IGNORE: Symbol(),
     };
 
     this.blockPath.traverse(loopLabelVisitor, state);
@@ -659,7 +659,7 @@ class BlockScoping {
     if (has.hasReturn) {
       // typeof ret === "object"
       retCheck = buildRetCheck({
-        RETURN: ret
+        RETURN: ret,
       });
     }
 

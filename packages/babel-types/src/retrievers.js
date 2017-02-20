@@ -7,7 +7,7 @@ import * as t from "./index";
 export function getBindingIdentifiers(
   node: Object,
   duplicates?: boolean,
-  outerOnly?: boolean
+  outerOnly?: boolean,
 ): Object {
   let search = [].concat(node);
   const ids = Object.create(null);
@@ -102,7 +102,7 @@ getBindingIdentifiers.keys = {
   ObjectPattern: ["properties"],
 
   VariableDeclaration: ["declarations"],
-  VariableDeclarator: ["id"]
+  VariableDeclarator: ["id"],
 };
 
 export function getOuterBindingIdentifiers(node: Object, duplicates?: boolean): Object {

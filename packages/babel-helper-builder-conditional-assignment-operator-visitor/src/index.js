@@ -5,8 +5,8 @@ export default function(
   exports: Object,
   opts: {
     build: Function,
-    is: Function
-  }
+    is: Function,
+  },
 ) {
   const buildAssignment = function(left, right) {
     return t.assignmentExpression("=", left, right);

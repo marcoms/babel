@@ -7,7 +7,7 @@ export default function({ types: t }) {
       if (!path.isFunctionDeclaration()) continue;
 
       const declar = t.variableDeclaration("let", [
-        t.variableDeclarator(func.id, t.toExpression(func))
+        t.variableDeclarator(func.id, t.toExpression(func)),
       ]);
 
       // hoist it up above everything else
@@ -33,7 +33,7 @@ export default function({ types: t }) {
 
       SwitchCase(path) {
         statementList("consequent", path);
-      }
-    }
+      },
+    },
   };
 }

@@ -5,5 +5,5 @@ import transformExportExtensions from "babel-plugin-transform-export-extensions"
 
 export default {
   presets: [presetStage2],
-  plugins: [transformClassConstructorCall, transformExportExtensions]
+  plugins: [transformClassConstructorCall, transformExportExtensions],
 };

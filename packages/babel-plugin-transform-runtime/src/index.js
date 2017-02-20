@@ -153,9 +153,9 @@ export default function({ types: t }) {
               node.computed
             )
           );
-        }
-      }
-    }
+        },
+      },
+    },
   };
 }
 

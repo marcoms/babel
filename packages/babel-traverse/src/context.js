@@ -47,7 +47,7 @@ export default class TraversalContext {
       parent: node,
       container: obj,
       key: key,
-      listKey
+      listKey,
     });
   }
 

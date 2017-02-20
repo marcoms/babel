@@ -31,7 +31,7 @@ export default function({ types: t }) {
         state.deopt = true;
         path.stop();
       }
-    }
+    },
   };
 
   class DestructuringTransformer {
@@ -146,7 +146,7 @@ export default function({ types: t }) {
 
       const value = t.callExpression(this.file.addHelper("objectWithoutProperties"), [
         objRef,
-        keys
+        keys,
       ]);
       this.nodes.push(this.buildVariableAssignment(spreadProp.argument, value));
     }
@@ -291,7 +291,7 @@ export default function({ types: t }) {
         if (t.isRestElement(elem)) {
           elemRef = this.toArray(arrayRef);
           elemRef = t.callExpression(t.memberExpression(elemRef, t.identifier("slice")), [
-            t.numericLiteral(i)
+            t.numericLiteral(i),
           ]);
 
           // set the element to the rest element argument since we've dealt with it
@@ -378,7 +378,7 @@ export default function({ types: t }) {
           kind: left.kind,
           file: file,
           scope: scope,
-          nodes: nodes
+          nodes: nodes,
         });
 
         destructuring.init(pattern, key);
@@ -402,7 +402,7 @@ export default function({ types: t }) {
           kind: "let",
           file: file,
           scope: scope,
-          nodes: nodes
+          nodes: nodes,
         });
         destructuring.init(pattern, ref);
 
@@ -419,7 +419,7 @@ export default function({ types: t }) {
           operator: node.operator,
           file: file,
           scope: scope,
-          nodes: nodes
+          nodes: nodes,
         });
 
         let ref;
@@ -462,7 +462,7 @@ export default function({ types: t }) {
             nodes: nodes,
             scope: scope,
             kind: node.kind,
-            file: file
+            file: file,
           });
 
           if (t.isPattern(pattern)) {
@@ -514,7 +514,7 @@ export default function({ types: t }) {
         } else {
           path.replaceWithMultiple(nodesOut);
         }
-      }
-    }
+      },
+    },
   };
 }

@@ -18,11 +18,11 @@ export default function() {
               break;
             }
           }
-        }
+        },
       },
       destructuring.visitor,
       rest.visitor,
-      def.visitor
-    ])
+      def.visitor,
+    ]),
   };
 }

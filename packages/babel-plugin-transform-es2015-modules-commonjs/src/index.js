@@ -58,7 +58,7 @@ const THIS_BREAK_KEYS = [
   "FunctionDeclaration",
   "ClassProperty",
   "ClassMethod",
-  "ObjectMethod"
+  "ObjectMethod",
 ];
 
 export default function() {
@@ -148,7 +148,7 @@ export default function() {
       nodes.push(t.binaryExpression(operator, arg.node, t.numericLiteral(1)));
 
       path.replaceWithMultiple(t.sequenceExpression(nodes));
-    }
+    },
   };
 
   return {
@@ -203,7 +203,7 @@ export default function() {
             const ref = path.scope.generateUidIdentifier(basename(source, extname(source)));
 
             const varDecl = t.variableDeclaration("var", [
-              t.variableDeclarator(ref, buildRequire(t.stringLiteral(source)).expression)
+              t.variableDeclarator(ref, buildRequire(t.stringLiteral(source)).expression),
             ]);
 
             // Copy location from the original import statement for sourcemap
@@ -246,7 +246,7 @@ export default function() {
               const importsEntry = imports[key] || {
                 specifiers: [],
                 maxBlockHoist: 0,
-                loc: path.node.loc
+                loc: path.node.loc,
               };
 
               importsEntry.specifiers.push(...path.node.specifiers);
@@ -379,7 +379,7 @@ export default function() {
               path.replaceWithMultiple(nodes);
             } else if (path.isExportAllDeclaration()) {
               const exportNode = buildExportAll({
-                OBJECT: addRequire(path.node.source.value, path.node._blockHoist)
+                OBJECT: addRequire(path.node.source.value, path.node._blockHoist),
               });
               exportNode.loc = path.node.loc;
               topNodes.push(exportNode);
@@ -404,7 +404,7 @@ export default function() {
                       t.variableDeclarator(
                         specifier.local,
                         t.callExpression(this.addHelper("interopRequireWildcard"), [uid])
-                      )
+                      ),
                     ]);
 
                     if (maxBlockHoist > 0) {
@@ -431,7 +431,7 @@ export default function() {
                         t.variableDeclarator(
                           target,
                           t.callExpression(this.addHelper("interopRequireDefault"), [uid])
-                        )
+                        ),
                       ]);
 
                       if (maxBlockHoist > 0) {
@@ -502,10 +502,10 @@ export default function() {
             remaps,
             scope,
             exports,
-            requeueInParent: newPath => path.requeue(newPath)
+            requeueInParent: newPath => path.requeue(newPath),
           });
-        }
-      }
-    }
+        },
+      },
+    },
   };
 }

@@ -46,7 +46,7 @@ const visitor = {
 
     state.selfReference = true;
     path.stop();
-  }
+  },
 };
 
 function wrap(state, method, id, scope) {
@@ -64,7 +64,7 @@ function wrap(state, method, id, scope) {
       const template = build({
         FUNCTION: method,
         FUNCTION_ID: id,
-        FUNCTION_KEY: scope.generateUidIdentifier(id.name)
+        FUNCTION_KEY: scope.generateUidIdentifier(id.name),
       }).expression;
       template.callee._skipModulesRemap = true;
 
@@ -89,7 +89,7 @@ function visit(node, name, scope) {
     selfReference: false,
     outerDeclar: scope.getBindingIdentifier(name),
     references: [],
-    name: name
+    name: name,
   };
 
   // check to see if we have a local binding of the id we're setting inside of

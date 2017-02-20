@@ -16,7 +16,7 @@ function buildTDZAssert(node, file) {
   return t.callExpression(file.addHelper("temporalRef"), [
     node,
     t.stringLiteral(node.name),
-    file.addHelper("temporalUndefined")
+    file.addHelper("temporalUndefined"),
   ]);
 }
 
@@ -61,7 +61,7 @@ export const visitor = {
         t.throwStatement(
           t.inherits(
             t.newExpression(t.identifier("ReferenceError"), [
-              t.stringLiteral(`${node.name} is not defined - temporal dead zone`)
+              t.stringLiteral(`${node.name} is not defined - temporal dead zone`),
             ]),
             node
           )
@@ -93,6 +93,6 @@ export const visitor = {
         nodes.push(node);
         path.replaceWithMultiple(nodes.map(t.expressionStatement));
       }
-    }
-  }
+    },
+  },
 };

@@ -4,8 +4,8 @@ import * as t from "babel-types";
 export default function(
   opts: {
     build: Function,
-    operator: string
-  }
+    operator: string,
+  },
 ): Object {
   const visitor = {};
 

@@ -11,10 +11,10 @@ export default function() {
         path.replaceWith(
           t.newExpression(t.identifier("RegExp"), [
             t.stringLiteral(node.pattern),
-            t.stringLiteral(node.flags)
+            t.stringLiteral(node.flags),
           ])
         );
-      }
-    }
+      },
+    },
   };
 }

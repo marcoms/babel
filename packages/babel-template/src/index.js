@@ -27,7 +27,7 @@ export default function(code: string, opts?: Object): Function {
     {
       allowReturnOutsideFunction: true,
       allowSuperOutsideMethod: true,
-      preserveComments: false
+      preserveComments: false,
     },
     opts
   );
@@ -39,7 +39,7 @@ export default function(code: string, opts?: Object): Function {
       ast = babylon.parse(code, opts);
 
       ast = traverse.removeProperties(ast, {
-        preserveComments: opts.preserveComments
+        preserveComments: opts.preserveComments,
       });
 
       traverse.cheap(ast, function(node) {
@@ -112,5 +112,5 @@ const templateVisitor = {
 
   exit({ node }) {
     if (!node.loc) traverse.clearNode(node);
-  }
+  },
 };

@@ -46,7 +46,7 @@ export default function({ types: t, template }) {
         MUTATOR_MAP_REF: getMutatorId(),
         KEY: key,
         VALUE: getValue(prop),
-        KIND: t.identifier(prop.kind)
+        KIND: t.identifier(prop.kind),
       })
     );
   }
@@ -76,7 +76,7 @@ export default function({ types: t, template }) {
           return t.callExpression(state.addHelper("defineProperty"), [
             info.initPropExpression,
             key,
-            getValue(prop)
+            getValue(prop),
           ]);
         } else {
           body.push(
@@ -139,7 +139,7 @@ export default function({ types: t, template }) {
 
               body.push(
                 t.variableDeclaration("var", [
-                  t.variableDeclarator(mutatorRef, t.objectExpression([]))
+                  t.variableDeclarator(mutatorRef, t.objectExpression([])),
                 ])
               );
             }
@@ -154,7 +154,7 @@ export default function({ types: t, template }) {
             computedProps,
             initPropExpression,
             getMutatorId,
-            state
+            state,
           });
 
           if (mutatorRef) {
@@ -171,8 +171,8 @@ export default function({ types: t, template }) {
             body.push(t.expressionStatement(objId));
             path.replaceWithMultiple(body);
           }
-        }
-      }
-    }
+        },
+      },
+    },
   };
 }

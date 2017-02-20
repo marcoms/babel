@@ -15,7 +15,7 @@ const visitor = {
 
   Function(path) {
     path.skip();
-  }
+  },
 };
 
 export default function(path: NodePath, scope = path.scope) {
@@ -30,7 +30,7 @@ export default function(path: NodePath, scope = path.scope) {
 
   const state = {
     foundThis: false,
-    foundArguments: false
+    foundArguments: false,
   };
 
   path.traverse(visitor, state);

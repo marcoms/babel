@@ -82,8 +82,8 @@ function preset(context, opts = {}) {
       modules === "systemjs" && [transformES2015ModulesSystemJS, optsLoose],
       modules === "amd" && [transformES2015ModulesAMD, optsLoose],
       modules === "umd" && [transformES2015ModulesUMD, optsLoose],
-      [transformRegenerator, { async: false, asyncGenerators: false }]
-    ].filter(Boolean) // filter out falsy values
+      [transformRegenerator, { async: false, asyncGenerators: false }],
+    ].filter(Boolean), // filter out falsy values
   };
 }
 
@@ -105,5 +105,5 @@ Object.defineProperty(oldConfig, "buildPreset", {
   // We make this non-enumerable so old versions of babel-core won't see it as an unknown property,
   // while allowing new versions to see it as a preset builder function.
   enumerable: false,
-  value: preset
+  value: preset,
 });

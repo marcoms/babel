@@ -31,7 +31,7 @@ export default function({ types: t }) {
             [node, defineMap.toDefineObject(mutatorMap)]
           )
         );
-      }
-    }
+      },
+    },
   };
 }

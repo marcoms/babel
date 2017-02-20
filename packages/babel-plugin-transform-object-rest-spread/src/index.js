@@ -5,7 +5,7 @@ export default function({ types: t }) {
       RestProperty() {
         foundRestProperty = true;
         path.stop();
-      }
+      },
     });
     return foundRestProperty;
   }
@@ -33,7 +33,10 @@ export default function({ types: t }) {
 
     return [
       restProperty.argument,
-      t.callExpression(file.addHelper("objectWithoutProperties"), [objRef, t.arrayExpression(keys)])
+      t.callExpression(file.addHelper("objectWithoutProperties"), [
+        objRef,
+        t.arrayExpression(keys),
+      ]),
     ];
   }
 
@@ -130,9 +133,9 @@ export default function({ types: t }) {
                 .findParent(path => path.isObjectProperty() || path.isVariableDeclarator())
                 .remove();
             }
-          }
+          },
         }, {
-          originalPath: path
+          originalPath: path,
         });
       },
       // taken from transform-es2015-destructuring/src/index.js#visitor
@@ -265,7 +268,7 @@ export default function({ types: t }) {
           : file.addHelper("extends");
 
         path.replaceWith(t.callExpression(helper, args));
-      }
-    }
+      },
+    },
   };
 }

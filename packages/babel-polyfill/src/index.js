@@ -16,7 +16,7 @@ function define(O, key, value) {
     Object[DEFINE_PROPERTY](O, key, {
       writable: true,
       configurable: true,
-      value: value
+      value: value,
     });
 }
 

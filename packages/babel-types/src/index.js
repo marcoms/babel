@@ -46,7 +46,7 @@ export {
   UNARY_OPERATORS,
   INHERIT_KEYS,
   BLOCK_SCOPED_SYMBOL,
-  NOT_LOCAL_BINDING
+  NOT_LOCAL_BINDING,
 } from "./constants";
 
 import "./definitions/init";
@@ -55,7 +55,7 @@ import {
   ALIAS_KEYS,
   NODE_FIELDS,
   BUILDER_KEYS,
-  DEPRECATED_KEYS
+  DEPRECATED_KEYS,
 } from "./definitions";
 export { VISITOR_KEYS, ALIAS_KEYS, NODE_FIELDS, BUILDER_KEYS, DEPRECATED_KEYS };
 
@@ -238,7 +238,7 @@ export function shallowEqual(actual: Object, expected: Object): boolean {
 export function appendToMemberExpression(
   member: Object,
   append: Object,
-  computed?: boolean
+  computed?: boolean,
 ): Object {
   member.object = t.memberExpression(member.object, member.property, member.computed);
   member.property = append;
@@ -533,7 +533,7 @@ export {
   isSpecifierDefault,
   isScope,
   isImmutable,
-  isNodesEquivalent
+  isNodesEquivalent,
 } from "./validators";
 
 export {
@@ -545,11 +545,11 @@ export {
   toStatement,
   toExpression,
   toBlock,
-  valueToNode
+  valueToNode,
 } from "./converters";
 
 export {
   createUnionTypeAnnotation,
   removeTypeDuplicates,
-  createTypeAnnotationBasedOnTypeof
+  createTypeAnnotationBasedOnTypeof,
 } from "./flow";

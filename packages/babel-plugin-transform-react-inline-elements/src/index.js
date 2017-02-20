@@ -62,7 +62,7 @@ export default function({ types: t }) {
 
         const el = t.callExpression(file.addHelper("jsx"), args);
         path.replaceWith(el);
-      }
-    }
+      },
+    },
   };
 }

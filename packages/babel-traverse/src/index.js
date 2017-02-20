@@ -15,7 +15,7 @@ export default function traverse(
   opts?: Object,
   scope?: Object,
   state: Object,
-  parentPath: Object
+  parentPath: Object,
 ) {
   if (!parent) return;
   if (!opts) opts = {};
@@ -49,7 +49,7 @@ traverse.node = function(
   scope: Object,
   state: Object,
   parentPath: Object,
-  skipKeys?
+  skipKeys?,
 ) {
   const keys: Array = t.VISITOR_KEYS[node.type];
   if (!keys) return;
@@ -83,7 +83,7 @@ traverse.hasType = function(
   tree: Object,
   scope: Object,
   type: Object,
-  blacklistTypes: Array<string>
+  blacklistTypes: Array<string>,
 ): boolean {
   // the node we're searching in is blacklisted
   if (includes(blacklistTypes, tree.type)) return false;
@@ -93,14 +93,14 @@ traverse.hasType = function(
 
   const state = {
     has: false,
-    type: type
+    type: type,
   };
 
   traverse(
     tree,
     {
       blacklist: blacklistTypes,
-      enter: hasBlacklistedType
+      enter: hasBlacklistedType,
     },
     scope,
     state

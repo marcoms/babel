@@ -56,7 +56,7 @@ export default function({ types: t }) {
           if (node.properties.length) args.push(node);
           path.replaceWith(t.callExpression(file.addHelper("extends"), args));
         }
-      }
-    }
+      },
+    },
   };
 }

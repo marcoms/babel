@@ -36,7 +36,7 @@ function getPrototypeOfExpression(objectRef, isStatic) {
     "||",
     t.memberExpression(targetRef, t.identifier("__proto__")),
     t.callExpression(t.memberExpression(t.identifier("Object"), t.identifier("getPrototypeOf")), [
-      targetRef
+      targetRef,
     ])
   );
 }
@@ -87,7 +87,7 @@ const visitor = {
         path.replaceWith(result);
       }
     }
-  }
+  },
 };
 
 export default class ReplaceSupers {
@@ -127,7 +127,7 @@ export default class ReplaceSupers {
     superRef: Object,
     isStatic: boolean,
     isLoose: boolean,
-    file: any
+    file: any,
   };
 
   getObjectRef() {
@@ -149,7 +149,7 @@ export default class ReplaceSupers {
       getPrototypeOfExpression(this.getObjectRef(), this.isStatic),
       isComputed ? property : t.stringLiteral(property.name),
       value,
-      t.thisExpression()
+      t.thisExpression(),
     ]);
   }
 
@@ -166,7 +166,7 @@ export default class ReplaceSupers {
     return t.callExpression(this.file.addHelper("get"), [
       getPrototypeOfExpression(this.getObjectRef(), this.isStatic),
       isComputed ? property : t.stringLiteral(property.name),
-      t.thisExpression()
+      t.thisExpression(),
     ]);
   }
 
@@ -221,7 +221,7 @@ export default class ReplaceSupers {
             node.left,
             t.binaryExpression(node.operator[0], ref, node.right)
           )
-        )
+        ),
       ];
     }
   }

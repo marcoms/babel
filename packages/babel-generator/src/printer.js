@@ -25,8 +25,8 @@ export type Format = {
   indent: {
     adjustMultilineComment: boolean,
     style: string,
-    base: number
-  }
+    base: number,
+  },
 };
 
 export default class Printer {
@@ -293,7 +293,7 @@ export default class Printer {
 
   startTerminatorless(): Object {
     return this._parenPushNewlineState = {
-      printed: false
+      printed: false,
     };
   }
 
@@ -375,7 +375,7 @@ export default class Printer {
     if (comment) {
       this._printComment({
         type: "CommentBlock",
-        value: comment
+        value: comment,
       });
     }
   }
@@ -388,7 +388,7 @@ export default class Printer {
     if (comment) {
       this._printComment({
         type: "CommentBlock",
-        value: comment
+        value: comment,
       });
     }
   }
@@ -406,7 +406,7 @@ export default class Printer {
     if (opts.indent) this.indent();
 
     const newlineOpts = {
-      addNewlines: opts.addNewlines
+      addNewlines: opts.addNewlines,
     };
 
     for (let i = 0; i < nodes.length; i++) {
@@ -599,7 +599,7 @@ for (const generator of [
   require("./generators/types"),
   require("./generators/flow"),
   require("./generators/base"),
-  require("./generators/jsx")
+  require("./generators/jsx"),
 ]) {
   Object.assign(Printer.prototype, generator);
 }

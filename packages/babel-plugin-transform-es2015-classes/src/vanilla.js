@@ -23,7 +23,7 @@ const noMethodVisitor = {
 
   Method(path) {
     path.skip();
-  }
+  },
 };
 
 const verifyConstructorVisitor = visitors.merge([
@@ -48,7 +48,7 @@ const verifyConstructorVisitor = visitors.merge([
             throw path.buildCodeFrameError("super() is only allowed in a derived constructor");
           }
         }
-      }
+      },
     },
 
     ThisExpression(path) {
@@ -57,8 +57,8 @@ const verifyConstructorVisitor = visitors.merge([
           throw path.buildCodeFrameError("'this' is not allowed before super()");
         }
       }
-    }
-  }
+    },
+  },
 ]);
 
 const findThisesVisitor = visitors.merge([
@@ -66,8 +66,8 @@ const findThisesVisitor = visitors.merge([
   {
     ThisExpression(path) {
       this.superThises.push(path);
-    }
-  }
+    },
+  },
 ]);
 
 export default class ClassTransformer {
@@ -266,7 +266,7 @@ export default class ClassTransformer {
             isStatic: node.static,
             isLoose: this.isLoose,
             scope: this.scope,
-            file: this.file
+            file: this.file,
           },
           true
         );
@@ -317,7 +317,7 @@ export default class ClassTransformer {
         nullNode, // instanceDescriptors
         nullNode, // staticDescriptors
         nullNode, // instanceInitializers
-        nullNode // staticInitializers
+        nullNode, // staticInitializers
       ];
 
       if (instanceProps) args[1] = instanceProps;
@@ -358,7 +358,7 @@ export default class ClassTransformer {
         bareSuperNode.arguments.length === 2 &&
         t.isSpreadElement(bareSuperNode.arguments[1]) &&
         t.isIdentifier(bareSuperNode.arguments[1].argument, {
-          name: "arguments"
+          name: "arguments",
         })
       ) {
         // special case single arguments spread
@@ -384,7 +384,7 @@ export default class ClassTransformer {
 
     let call = t.callExpression(this.file.addHelper("possibleConstructorReturn"), [
       t.thisExpression(),
-      bareSuperNode
+      bareSuperNode,
     ]);
 
     const bareSuperAfter = this.bareSuperAfter.map(fn => fn(thisRef));
@@ -411,7 +411,7 @@ export default class ClassTransformer {
       bareSuper.replaceWithMultiple([
         t.variableDeclaration("var", [t.variableDeclarator(thisRef, call)]),
         ...bareSuperAfter,
-        t.expressionStatement(thisRef)
+        t.expressionStatement(thisRef),
       ]);
     }
   }
@@ -474,7 +474,7 @@ export default class ClassTransformer {
           .get("argument")
           .replaceWithMultiple([
             t.assignmentExpression("=", ref, returnPath.node.argument),
-            wrapReturn(ref)
+            wrapReturn(ref),
           ]);
       } else {
         returnPath.get("argument").replaceWith(wrapReturn());

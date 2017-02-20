@@ -8,7 +8,7 @@ export default function({ types: t }) {
       methodPath: path,
       isStatic: true,
       scope: scope,
-      file: file
+      file: file,
     });
 
     replaceSupers.replace();
@@ -41,8 +41,8 @@ export default function({ types: t }) {
             path.scope.push({ id: objectRef });
             path.replaceWith(t.assignmentExpression("=", objectRef, path.node));
           }
-        }
-      }
-    }
+        },
+      },
+    },
   };
 }

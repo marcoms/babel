@@ -5,5 +5,5 @@ import transformFunctionBind from "babel-plugin-transform-function-bind";
 
 export default {
   presets: [presetStage1],
-  plugins: [transformDoExpressions, transformFunctionBind]
+  plugins: [transformDoExpressions, transformFunctionBind],
 };

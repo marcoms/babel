@@ -48,17 +48,17 @@ export default function({ types: t }) {
         const fileNameIdentifier = path.scope.generateUidIdentifier(FILE_NAME_VAR);
         path.hub.file.scope.push({
           id: fileNameIdentifier,
-          init: t.stringLiteral(fileName)
+          init: t.stringLiteral(fileName),
         });
         state.fileNameIdentifier = fileNameIdentifier;
       }
 
       const trace = makeTrace(state.fileNameIdentifier, location.start.line);
       attributes.push(t.jSXAttribute(id, t.jSXExpressionContainer(trace)));
-    }
+    },
   };
 
   return {
-    visitor
+    visitor,
   };
 }

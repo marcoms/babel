@@ -15,12 +15,12 @@ sourceMapSupport.install({
     if (map) {
       return {
         url: null,
-        map: map
+        map: map,
       };
     } else {
       return null;
     }
-  }
+  },
 });
 
 registerCache.load();
@@ -51,7 +51,7 @@ function compile(filename) {
   const opts = new OptionManager().init(
     extend({ sourceRoot: path.dirname(filename) }, deepClone(transformOpts), {
       // sourceRoot can be overwritten
-      filename
+      filename,
     })
   );
 
@@ -75,7 +75,7 @@ function compile(filename) {
         // calls above and would introduce duplicates.
         babelrc: false,
         sourceMaps: "both",
-        ast: false
+        ast: false,
       })
     );
   }

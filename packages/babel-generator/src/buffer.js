@@ -22,13 +22,13 @@ export default class Buffer {
 
   _position: Object = {
     line: 1,
-    column: 0
+    column: 0,
   };
   _sourcePosition: Object = {
     identifierName: null,
     line: null,
     column: null,
-    filename: null
+    filename: null,
   };
 
   /**
@@ -44,7 +44,7 @@ export default class Buffer {
       // source string since it may be arbitrarily large after all transformations
       code: trimRight(this._buf.join("")),
       map: null,
-      rawMappings: map && map.getRawMappings()
+      rawMappings: map && map.getRawMappings(),
     };
 
     if (map) {
@@ -58,7 +58,7 @@ export default class Buffer {
         },
         set(value) {
           Object.defineProperty(this, "map", { value, writable: true });
-        }
+        },
       });
     }
 
@@ -100,7 +100,7 @@ export default class Buffer {
     line: number,
     column: number,
     identifierName: ?string,
-    filename: ?string
+    filename: ?string,
   ): void {
     // If there the line is ending, adding a new mapping marker is redundant
     if (this._map && str[0] !== "\n") {

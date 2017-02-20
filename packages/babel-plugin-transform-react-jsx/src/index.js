@@ -17,7 +17,7 @@ export default function({ types: t }) {
 
     post(state, pass) {
       state.callee = pass.get("jsxIdentifier")();
-    }
+    },
   });
 
   visitor.Program = function(path, state) {
@@ -48,6 +48,6 @@ export default function({ types: t }) {
 
   return {
     inherits: jsx,
-    visitor
+    visitor,
   };
 }

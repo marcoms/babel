@@ -74,7 +74,7 @@ export default function({ types: t }) {
         } else {
           path.replaceWith(nodes[0]);
         }
-      }
-    }
+      },
+    },
   };
 }

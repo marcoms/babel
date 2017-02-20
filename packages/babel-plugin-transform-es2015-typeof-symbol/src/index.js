@@ -49,7 +49,7 @@ export default function({ types: t }) {
             path.replaceWith(call);
           }
         }
-      }
-    }
+      },
+    },
   };
 }

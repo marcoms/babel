@@ -23,5 +23,5 @@ export const visitor = {
         param.replaceWith(uid);
       }
     }
-  }
+  },
 };

@@ -20,7 +20,7 @@ export default class SourceMap {
     if (!this._cachedMap) {
       const map = this._cachedMap = new sourceMap.SourceMapGenerator({
         file: this._opts.sourceMapTarget,
-        sourceRoot: this._opts.sourceRoot
+        sourceRoot: this._opts.sourceRoot,
       });
 
       const code = this._code;
@@ -53,7 +53,7 @@ export default class SourceMap {
     line: number,
     column: number,
     identifierName: ?string,
-    filename: ?string
+    filename: ?string,
   ) {
     // Adding an empty mapping at the start of a generated line just clutters the map.
     if (this._lastGenLine !== generatedLine && line === null) return;
@@ -80,15 +80,15 @@ export default class SourceMap {
       name: identifierName || undefined,
       generated: {
         line: generatedLine,
-        column: generatedColumn
+        column: generatedColumn,
       },
       source: line == null ? undefined : filename || this._opts.sourceFileName,
       original: line == null
         ? undefined
         : {
             line: line,
-            column: column
-          }
+            column: column,
+          },
     });
   }
 }
